@@ -1,0 +1,371 @@
+/* Open Science Foundation house style.
+ *
+ * Written against design/system/ai-design-system.md in the osf-website-2026
+ * repository, which is the canonical LLM reference for the production site.
+ * Tokens are copied verbatim from its @theme block. Conventions followed:
+ * flat surfaces (no shadow, no gradient), blue as accent only and never a
+ * surface, mono for labels/buttons/captions and Selecta for body, sentence-
+ * case headings, the single button recipe at 9px radius, and the 1px
+ * spacing base with the step vocabulary the components actually use.
+ *
+ * FONT LICENSING: Selecta and ABCDiatypeSemiMono are commercially licensed.
+ * The files are gitignored here and must not be redistributed.
+ */
+
+@font-face{font-family:"Selecta";src:url("fonts/Selecta-Regular.woff2") format("woff2");
+  font-weight:400;font-display:swap}
+@font-face{font-family:"Selecta";src:url("fonts/Selecta-Medium.woff2") format("woff2");
+  font-weight:500;font-display:swap}
+@font-face{font-family:"Selecta";src:url("fonts/Selecta-Bold.woff2") format("woff2");
+  font-weight:700;font-display:swap}
+@font-face{font-family:"ABCDiatypeSemiMono";src:url("fonts/ABCDiatypeSemiMono-Regular.woff2")
+  format("woff2");font-weight:400;font-display:swap}
+
+:root{
+  /* @theme tokens, verbatim */
+  --color-white:#fff; --color-black:#1d1d1d; --color-gray:#646363;
+  --color-gray-light:#eee; --color-blue:#73adff; --color-blue-ink:#1c4e8f;
+  --color-cream-light:#f8f8f4; --color-cream:#efeee7; --color-cream-dark:#c0beb2;
+  --color-cream-darker:#6f6e66; --color-yellow:#e3be00; --color-yellow-light:#fefbe9;
+  --color-button:#323232; --color-button-hover:#000;
+  --muted:var(--color-gray);
+  --font-body:"Selecta",ui-sans-serif,system-ui,sans-serif;
+  --font-mono:"ABCDiatypeSemiMono",ui-monospace,monospace;
+  --radius-btn:9px; --radius-md:.375rem; --radius-xl:.75rem; --radius-2xl:1rem;
+  /* type scale, line-height 1.2 unless noted */
+  --text-sm:.875rem; --text-base:1rem; --text-xl:1.125rem; --text-1xl:1.3125rem;
+  --text-2xl:1.875rem; --text-3xl:2.25rem; --text-4xl:2.5rem;
+  /* No semantic red/green: the OSF palette has neither, and the system
+     carries state with fill and muting rather than hue. */
+}
+
+*{box-sizing:border-box}
+html{-webkit-font-smoothing:antialiased;font-size:13.2px}
+@media(min-width:40rem){html{font-size:13.6px}}
+@media(min-width:48rem){html{font-size:14px}}
+@media(min-width:64rem){html{font-size:15px}}
+@media(min-width:80rem){html{font-size:16px}}
+@media(min-width:96rem){html{font-size:17px}}
+
+body{margin:0;background:var(--color-white);color:var(--color-black);
+  font:400 1rem/1.5 var(--font-body)}
+
+/* ── header: the production AppHeader pattern ────────────────────
+   Fixed-height white bar (5rem), wordmark left, nav links text-xl with
+   hover:blue. The dark bar this replaces was our invention — production
+   headers are bg-white with no scroll-dependent styling. */
+header{background:var(--color-white);position:sticky;top:0;z-index:20;
+  border-bottom:1px solid var(--color-cream)}
+.bar{max-width:87rem;margin:0 auto;padding:23px 20px;min-height:5rem;
+  display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap}
+@media(min-width:64rem){.bar{padding:23px 32px;gap:40px}}
+.logo{display:flex;align-items:center;text-decoration:none}
+.logo img{height:36px;width:auto;display:block}
+@media(min-width:64rem){.logo img{height:44px}}
+.prod{display:block;margin-right:auto;padding-left:24px;
+  border-left:1px solid var(--color-cream-dark)}
+.prod .t1{display:block;color:var(--color-black);font-size:var(--text-xl);
+  font-weight:500;line-height:1.2}
+.prod .t2{display:block;font-family:var(--font-mono);font-size:var(--text-sm);
+  color:var(--color-cream-darker);line-height:1.4}
+nav{display:flex;gap:24px;flex-wrap:wrap}
+nav button{background:none;border:0;cursor:pointer;padding:0;
+  font-size:var(--text-xl);line-height:1.2;color:var(--color-black);
+  transition:color .1s}
+nav button:hover{color:var(--color-blue)}
+/* the original's active-link variant, verbatim: yellow + underline */
+nav button.on{color:var(--color-yellow);text-decoration:underline;
+  text-underline-offset:3px}
+
+/* ── layout ─────────────────────────────────────────────────────── */
+main{max-width:87rem;margin:0 auto;padding:60px 20px 140px}
+@media(min-width:64rem){main{padding:80px 32px 250px}}
+section>*+*{margin-top:0}
+
+/* ── type ───────────────────────────────────────────────────────── */
+h1{font-size:3rem;line-height:1;font-weight:500;margin:0 0 40px;
+  max-width:18ch;letter-spacing:-.01em}
+@media(min-width:40rem){h1{font-size:4rem}}
+@media(min-width:64rem){h1{font-size:5rem}}
+h1 .blue{color:var(--color-blue)}
+/* the section label: mono, uppercase, blue — a <p>, not a heading */
+.label{font-family:var(--font-mono);font-size:var(--text-xl);font-weight:700;
+  letter-spacing:.02em;text-transform:uppercase;color:var(--color-blue);
+  margin:60px 0 8px}
+@media(min-width:64rem){.label{font-size:var(--text-sm)}}
+h2{font-size:var(--text-2xl);line-height:1.2;font-weight:400;
+  color:var(--color-black);margin:0 0 20px}
+@media(min-width:64rem){h2{font-size:var(--text-3xl)}}
+h3{font-size:var(--text-xl);font-weight:700;margin:30px 0 10px}
+p{margin:0 0 16px;max-width:78ch}
+p.lede{font-size:var(--text-1xl);line-height:1.4;color:var(--color-gray);
+  max-width:70ch;margin-bottom:30px}
+a{color:var(--color-blue-ink);text-decoration:underline;text-underline-offset:2px}
+a:hover{color:var(--color-yellow)}
+
+/* ── cards ──────────────────────────────────────────────────────── */
+.grid{display:grid;gap:30px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  margin:30px 0}
+.card{background:var(--color-cream);border:1px solid var(--color-cream);
+  border-radius:var(--radius-2xl);padding:30px}
+.card b{display:block;font-size:var(--text-2xl);line-height:1;font-weight:500;
+  margin-bottom:10px}
+.card span{font-family:var(--font-mono);font-size:var(--text-sm);
+  color:var(--color-cream-darker);line-height:1.3;display:block}
+
+/* ── tables ─────────────────────────────────────────────────────── */
+table{border-collapse:collapse;width:100%;font-size:var(--text-base);
+  margin:20px 0;display:block;overflow-x:auto}
+th,td{border-bottom:1px solid var(--color-gray-light);padding:12px 16px;
+  text-align:left;vertical-align:top}
+thead th{font-family:var(--font-mono);font-size:var(--text-sm);
+  font-weight:700;text-transform:uppercase;letter-spacing:.02em;
+  color:var(--color-cream-darker);border-bottom:1px solid var(--color-cream-dark)}
+tbody th{font-weight:700;white-space:nowrap;width:1%}
+
+code{font-family:var(--font-mono);font-size:.9em;background:var(--color-cream);
+  padding:2px 6px;border-radius:var(--radius-md)}
+pre{background:var(--color-button);color:var(--color-white);padding:24px;
+  border-radius:var(--radius-xl);overflow-x:auto;
+  font:400 var(--text-sm)/1.6 var(--font-mono);margin:20px 0}
+pre code{background:none;padding:0;color:inherit;font-size:1em}
+
+/* ── notes: the grant-card surface, flat ─────────────────────────
+   The design system has no callout component and no red. Production's
+   bordered surface is `rounded-2xl border border-cream bg-cream p-30`
+   (GrantsSection, CookieConsent), and its emphasis device is a mono
+   caption — so a note is that card, and severity is carried by the
+   label, not by a coloured rule. */
+.note{background:var(--color-cream);border:1px solid var(--color-cream);
+  border-radius:var(--radius-2xl);padding:24px 30px;margin:20px 0;max-width:82ch}
+.note>strong:first-child{display:block;font-family:var(--font-mono);
+  font-size:var(--text-sm);font-weight:700;letter-spacing:.02em;
+  text-transform:uppercase;color:var(--color-cream-darker);margin-bottom:8px}
+.note.bad{border-color:var(--color-cream-dark)}
+.note.bad>strong:first-child{color:var(--color-black)}
+.note.warn{background:var(--color-cream-light);border-color:var(--color-cream-dark)}
+.note.good{background:var(--color-cream-light)}
+
+/* ── pills: mono, cream resting, never blue surface ─────────────── */
+.pill{display:inline-block;padding:3px 10px;border-radius:999px;
+  font:400 var(--text-sm)/1.4 var(--font-mono);border:1px solid var(--color-cream-dark);
+  background:var(--color-cream-light);color:var(--color-cream-darker);white-space:nowrap}
+/* State by weight, not hue: filled = passed, outlined = failed,
+   dashed and muted = neither (queued, not applicable). */
+.pill.ok{background:var(--color-button);border-color:var(--color-button);
+  color:var(--color-cream-light)}
+.pill.no,.pill.bad{background:var(--color-white);border-color:var(--color-black);
+  color:var(--color-black)}
+.pill.warn{background:var(--color-white);border-style:dashed;
+  border-color:var(--color-cream-dark);color:var(--color-black)}
+
+/* ── hypothesis blocks ──────────────────────────────────────────── */
+.hyp{background:var(--color-cream-light);border:1px solid var(--color-cream);
+  border-radius:var(--radius-2xl);padding:24px 30px;margin:16px 0}
+.hyp .st{font-size:var(--text-base);line-height:1.5}
+.hyp .meta{font-family:var(--font-mono);font-size:var(--text-sm);
+  color:var(--color-cream-darker);margin-top:12px;line-height:1.5}
+
+/* ── engine rows ────────────────────────────────────────────────── */
+.engtable{border:1px solid var(--color-cream-dark);border-radius:var(--radius-2xl);
+  overflow:hidden;margin:20px 0}
+.enghead,details.eng>summary{display:grid;gap:16px;align-items:center;
+  /* `auto` sized the header text and the row pills independently, so the
+     columns did not line up. Fixed tracks keep header and rows on the
+     same grid. */
+  grid-template-columns:minmax(9rem,1.6fr) minmax(8rem,1.4fr) 9rem 9.5rem 6rem;
+  padding:16px 24px}
+.enghead{background:var(--color-cream);font-family:var(--font-mono);
+  font-size:var(--text-sm);font-weight:700;text-transform:uppercase;
+  letter-spacing:.02em;color:var(--color-cream-darker)}
+details.eng{border-top:1px solid var(--color-gray-light);
+  background:var(--color-white)}
+details.eng>summary{cursor:pointer;list-style:none;font-size:var(--text-base)}
+details.eng>summary::-webkit-details-marker{display:none}
+details.eng>summary:hover{background:var(--color-cream-light)}
+details.eng[open]>summary{background:var(--color-cream-light)}
+details.eng .nm{font-weight:700}
+details.eng .arch{color:var(--color-gray);font-size:var(--text-sm);line-height:1.3}
+details.eng .more{font-family:var(--font-mono);font-size:var(--text-sm);
+  color:var(--color-blue-ink);white-space:nowrap;text-align:right}
+details.eng .more::after{content:" ▸";display:inline-block;transition:transform .1s}
+details.eng[open] .more::after{transform:rotate(90deg)}
+details.eng .body{padding:4px 24px 24px;font-size:var(--text-base);
+  line-height:1.55;border-top:1px solid var(--color-gray-light);margin:0 24px}
+details.eng .body p{margin:16px 0;max-width:76ch}
+details.eng .seam{background:var(--color-cream);border-radius:var(--radius-md);
+  padding:12px 16px;font-size:var(--text-sm);margin:16px 0}
+details.eng .refs{border-top:1px solid var(--color-gray-light);margin-top:20px;
+  padding-top:12px;font-family:var(--font-mono);font-size:var(--text-sm);
+  color:var(--color-cream-darker)}
+details.eng .refs b{display:block;text-transform:uppercase;letter-spacing:.02em;
+  margin-bottom:6px}
+details.eng .refs ul{margin:0;padding-left:16px}
+details.eng .refs li{margin:4px 0}
+
+/* ── selector ───────────────────────────────────────────────────── */
+.sel{background:var(--color-cream-light);border:1px solid var(--color-cream);
+  border-radius:var(--radius-2xl);padding:30px}
+label.opt{display:flex;gap:12px;align-items:flex-start;padding:12px 0;
+  border-bottom:1px solid var(--color-gray-light);cursor:pointer}
+label.opt:last-child{border-bottom:none}
+label.opt input{margin-top:3px;accent-color:var(--color-blue-ink);
+  width:16px;height:16px}
+label.opt .t{font-weight:700;font-size:var(--text-base)}
+label.opt .d{color:var(--color-gray);font-size:var(--text-sm);display:block;
+  margin-top:3px}
+label.opt.disabled{opacity:.5;cursor:not-allowed}
+.claim-picker{margin:2px 0 10px 28px;padding:2px 16px 8px;
+  border-left:2px solid var(--color-cream-dark)}
+.claim-picker>.dim{font-family:inherit;margin:8px 0}
+.claim-picker label.opt{padding:7px 0;align-items:center}
+.claim-picker label.opt .t{font-family:var(--font-mono);font-size:var(--text-sm)}
+.claim-picker label.opt .d{display:inline;margin:0 0 0 10px}
+.claim-picker label.opt .pill{margin-left:auto;white-space:nowrap}
+.two{display:grid;gap:30px;grid-template-columns:1fr 1fr;align-items:start}
+.hide{display:none}
+.bar2{height:6px;border-radius:999px;background:var(--color-gray-light);
+  overflow:hidden;margin-top:6px;max-width:170px}
+.bar2 i{display:block;height:100%;background:var(--color-black)}
+
+/* ── the one button recipe ──────────────────────────────────────── */
+button:not(nav button){display:inline-flex;align-items:center;
+  justify-content:center;gap:10px;background:var(--color-button);
+  color:var(--color-white);border:0;cursor:pointer;
+  font:300 var(--text-xl)/1.2 var(--font-mono);padding:10px 20px;
+  border-radius:var(--radius-btn);transition:background-color .1s}
+button:not(nav button):hover{background:var(--color-button-hover)}
+input[type=text],select{font:400 var(--text-base) var(--font-body);
+  padding:6px 10px;border:1px solid var(--color-cream-dark);
+  border-radius:var(--radius-md);background:var(--color-white)}
+input[type=file]{font:400 var(--text-sm) var(--font-mono)}
+
+footer{background:var(--color-button);color:var(--color-cream-dark);
+  font:400 var(--text-sm)/1.6 var(--font-mono);padding:40px 20px;
+  text-align:center;margin-top:100px}
+footer a{color:var(--color-blue)}
+
+@media(max-width:64rem){.two{grid-template-columns:1fr}}
+@media(max-width:40rem){
+  .enghead{display:none}
+  details.eng>summary{grid-template-columns:1fr;gap:6px}
+  details.eng .more{text-align:left}
+  main{padding:40px 20px 100px}
+}
+
+/* ---- the ledger: every hypothesis, every verdict --------------------- */
+.lgbar{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;
+  align-items:center;margin:20px 0 16px}
+.lgbar>div{display:flex;flex-wrap:wrap;gap:8px}
+.lgb{background:none;border:0;cursor:pointer;padding:0;
+  font:400 var(--text-sm)/1.4 var(--font-mono);color:var(--color-cream-darker)}
+.lgb:hover{color:var(--color-black)}
+.lgb.on{color:var(--color-black);text-decoration:underline;
+  text-underline-offset:3px}
+#lgseed{font:300 var(--text-sm)/1 var(--font-mono);padding:6px 12px;border-radius:9px;
+  border:1px solid var(--color-gray-light);background:var(--color-white);color:var(--color-black)}
+.ledger{table-layout:auto}
+.ledger thead th:not(:first-child){white-space:nowrap}
+.ledger td{vertical-align:top;font-size:var(--text-sm)}
+.lgrow{cursor:pointer}
+.lgrow:hover>td{background:var(--color-cream)}
+.lgrow.open>td{background:var(--color-cream);border-bottom-color:transparent}
+.lgrow td:first-child{min-width:20rem}
+.dim{color:var(--color-gray);font-family:var(--font-mono);font-size:var(--text-sm)}
+.lgdet>td{background:var(--color-cream);padding:0 16px 24px}
+.lgbody{max-width:62rem}
+.lgbody .label{margin:24px 0 8px}
+table.kv{margin:0}
+table.kv th{width:12rem;text-align:left;font-family:var(--font-mono);
+  font-size:var(--text-sm);font-weight:400;color:var(--color-gray);vertical-align:top}
+table.kv td{font-size:var(--text-sm)}
+table.verd td>div{margin-top:6px;color:var(--color-gray)}
+ol.steps{font-size:var(--text-sm);padding-left:20px;margin:0}
+ol.steps li{margin-bottom:10px}
+ol.steps .pill{margin-right:6px}
+@media (max-width:60rem){
+  .ledger,.ledger tbody,.ledger tr,.ledger td{display:block;width:100%}
+  .ledger thead{display:none}
+  .lgrow{border-bottom:1px solid var(--color-gray-light);padding:12px 0}
+  .lgrow td{border:0;padding:3px 0;display:flex;gap:10px;align-items:baseline}
+  .lgrow td::before{content:attr(data-l);flex:0 0 8rem;
+    font:400 var(--text-sm)/1.6 var(--font-mono);color:var(--color-gray);
+    text-transform:uppercase;letter-spacing:.02em}
+  .lgrow td[data-l="hypothesis"]{display:block}
+  .lgrow td[data-l="hypothesis"]::before{display:none}
+  .lgrow td[data-l="question"] br{display:none}
+  .lgrow td[data-l="question"] .dim{margin-left:8px}
+  .ledger td:first-child{min-width:0}
+}
+
+/* ---- run trigger ----------------------------------------------------- */
+.keyrow{display:grid;grid-template-columns:minmax(14rem,1fr) 1fr;gap:12px;
+  align-items:center;padding:8px 0;border-bottom:1px solid var(--color-cream)}
+.keyrow:last-of-type{border-bottom:0}
+.keyrow input{width:100%;padding:8px 12px;border:1px solid var(--color-cream-dark);
+  border-radius:var(--radius-md);font:400 var(--text-sm)/1.4 var(--font-mono);
+  background:var(--color-white);color:var(--color-black)}
+.keyrow input:focus{outline:2px solid var(--color-blue);outline-offset:1px}
+button.ghost{background:none;border:0;color:var(--color-black);
+  font:300 var(--text-xl)/1.2 var(--font-mono);padding:10px 0;
+  text-decoration:underline;text-underline-offset:2px;cursor:pointer}
+button.ghost:hover{color:var(--color-yellow);background:none}
+button:disabled{opacity:.45;cursor:default}
+#run-log{font-size:.8rem}
+@media(max-width:48rem){.keyrow{grid-template-columns:1fr}}
+
+/* blue focus ring — the accent's fourth sanctioned use */
+:focus-visible{outline:2px solid var(--color-blue);outline-offset:2px}
+
+/* ---- figures: flat editorial SVG on the card surface ------------------ */
+.fig{margin:24px 0;padding:30px;background:var(--color-white);
+  border:1px solid var(--color-cream);border-radius:var(--radius-2xl);
+  max-width:46rem}
+.fig svg{width:100%;height:auto;display:block}
+.fig .fmono{font-family:var(--font-mono);font-size:12px}
+.fig figcaption{margin-top:16px;font-family:var(--font-mono);
+  font-size:var(--text-sm);color:var(--color-cream-darker);line-height:1.5}
+
+/* ---- run page: depth + cost ------------------------------------------ */
+.run-sub{font-size:var(--text-sm);color:var(--color-gray);margin:0 0 12px}
+.ecost{display:inline-flex;gap:6px;align-items:baseline;margin-left:8px}
+.ecost .dim{font-size:var(--text-sm)}
+#cost-out table.kv th{width:14rem}
+#price-panel .keyrow{grid-template-columns:1fr auto}
+#price-panel input{padding:6px 8px;border:1px solid var(--color-cream-dark);
+  border-radius:var(--radius-md);font:400 var(--text-sm)/1.4 var(--font-mono);
+  background:var(--color-white);color:var(--color-black)}
+
+/* reduced motion: honor the OS setting */
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition-duration:.01ms!important;
+    animation-duration:.01ms!important}
+}
+
+/* ledger row: keyboard affordance */
+.lgrow:focus-visible{outline:2px solid var(--color-blue);outline-offset:-2px}
+
+/* ---- resolved citations: papers, not ids ----------------------------- */
+ul.cites{margin:6px 0 0;padding-left:18px;font-size:var(--text-sm)}
+ul.cites li{margin:3px 0;line-height:1.4}
+.citechips{display:inline;margin-left:4px}
+.citetag{font-family:var(--font-mono);font-size:var(--text-sm);
+  color:var(--color-cream-darker);border-bottom:1px dotted var(--color-cream-dark)}
+a .citetag{color:var(--color-blue-ink)}
+
+/* ---- ledger: filter grid + sortable headers ------------------------- */
+.lgfilters{display:flex;flex-wrap:wrap;gap:12px 16px;align-items:end;margin:12px 0 4px}
+.lgf{display:flex;flex-direction:column;gap:3px}
+.lgf>span{font:400 var(--text-sm)/1 var(--font-mono);color:var(--color-cream-darker);
+  text-transform:uppercase;letter-spacing:.02em}
+.lgf select{font:300 var(--text-sm)/1 var(--font-mono);padding:6px 10px;
+  border:1px solid var(--color-cream-dark);border-radius:var(--radius-md);
+  background:var(--color-white);color:var(--color-black);min-width:8rem}
+#lgtext{font:300 var(--text-sm)/1 var(--font-mono);padding:7px 12px;
+  border:1px solid var(--color-cream-dark);border-radius:var(--radius-md);
+  background:var(--color-white);color:var(--color-black);min-width:15rem}
+#lgtext:focus,.lgf select:focus{outline:2px solid var(--color-blue);outline-offset:1px}
+#lgdir{white-space:nowrap}
+th.lgsort{cursor:pointer;user-select:none}
+th.lgsort:hover{color:var(--color-blue)}
+th.lgsort.on{color:var(--color-black);border-bottom:2px solid var(--color-black)}

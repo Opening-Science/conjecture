@@ -76,6 +76,7 @@ claims be measured honestly rather than leaked.
 | `judge/<name>/` | One judge each: `judge.yaml` and `adapter.py`. |
 | `run_engine.py`, `run_judge.py` | Run any engine over the questions, any judge over the chunks. |
 | `mcp_client.py` | Minimal MCP client, used by adapters that reach the corpus over MCP. |
+| `panel/` | The run panel: a local web app over the active pack (`server.py`), and a read-only static export of it (`export.py`). |
 | `conformance/` | Toy pack and conformance runner; results feed `connectors/STATUS.md`. |
 | `merge/merge.py` | Cross-engine clustering, provenance kept. |
 | `judge/certify.py` | Mechanical checks then the judged audit. |
@@ -192,6 +193,31 @@ python connectors/fetch_vendor.py                    # upstream engines, pinned
 
 Python 3.11+. Engines bring their own requirements: the Codex adapters
 need the Codex CLI, the Claude adapters a Claude Code session.
+
+## The run panel
+
+```bash
+python panel/server.py              # http://127.0.0.1:8787, for the active pack
+python panel/export.py --out site/  # a read-only copy any static host can serve
+```
+
+The panel shows the active pack: its questions, every engine and judge
+with its status (from the manifests and conformance results), the cost
+of a run at a chosen depth, the command list for it, the results, the
+per-candidate ledger and the verification measurements. Everything is
+built from the pack and the manifests; nothing in the panel names a
+field or an engine. A pack can add its own write-up of what its runs
+found as `outputs/panel/findings.html`, which the Verification page
+shows after the hub's own sections.
+
+The local server can also start runs. It binds to 127.0.0.1 only, runs
+only a whitelist derived from the manifests (one job per built,
+self-driving engine or judge), keeps API keys in the hub's `.env` (mode
+0600) and never starts theoria without an explicit list of claims. It
+is a local instrument, not a service: do not expose it. The export
+cannot start anything, so it is the version to put on a website; it
+carries no local paths, and never the licensed fonts (drop those into
+`panel/fonts/` locally; the CSS falls back without them).
 
 ## Writing a pack
 
