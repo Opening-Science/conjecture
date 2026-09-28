@@ -1,0 +1,50 @@
+{
+ "kind": "engine",
+ "name": "baseline-claude",
+ "pack": "toy",
+ "commit": "0c1f007",
+ "date": "2026-09-28",
+ "manifest_sha": "5ffd22c2410a",
+ "adapter_sha": "0785926d3fb7",
+ "status": "pass",
+ "checks": [
+  {
+   "check": "hof",
+   "ok": true,
+   "detail": "6 hypotheses",
+   "seed": "T1"
+  },
+  {
+   "check": "schema",
+   "ok": true,
+   "detail": "",
+   "seed": "T1"
+  },
+  {
+   "check": "citations",
+   "ok": true,
+   "detail": "23 distinct works cited",
+   "seed": "T1"
+  },
+  {
+   "check": "corpus_used",
+   "ok": true,
+   "detail": "37 calls logged by the hub",
+   "seed": "T1"
+  },
+  {
+   "check": "no_outside",
+   "ok": true,
+   "detail": "only toy-corpus ids cited; no web tool, curl or wget",
+   "seed": "T1"
+  }
+ ],
+ "info": {
+  "T1": {
+   "elapsed_s": 0.0,
+   "n_hypotheses": 6,
+   "corpus_calls": 37,
+   "hof_warnings": []
+  }
+ }
+}

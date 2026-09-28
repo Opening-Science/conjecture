@@ -1,0 +1,16 @@
+contract: 1
+kind: judge
+name: reference
+title: Reference judge (no model)
+summary: >-
+  Word-overlap check of each citation step against the abstracts it
+  cites, plus a check that the experiment names a comparison. Exercises
+  the judge contract with no model; a floor, not an auditor.
+upstream: {repo: null, commit: null, licence: n/a (native to the hub)}
+corpus_access: handed
+invocation: self-driving
+backend: none
+model: none (deterministic)
+requires: {}
+network: {policy: none, enforced_by: no network code}
+cost: {billing: free}

@@ -1,0 +1,16 @@
+contract: 1
+kind: engine
+name: reference
+title: Reference adapter (no model)
+summary: >-
+  Proposes that the best-matching findings replicate. Exercises the
+  whole contract (MCP retrieval, HOF, citation checks) with no model and
+  no key; a floor every engine should beat.
+upstream: {repo: null, commit: null, licence: n/a (native to the hub)}
+corpus_access: mcp
+invocation: self-driving
+backend: none
+model: none (deterministic)
+requires: {}
+network: {policy: none, enforced_by: no network code; corpus over local stdio}
+cost: {billing: free}

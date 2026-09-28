@@ -1,0 +1,27 @@
+contract: 1
+kind: judge
+name: theoria
+title: theoria (arithmetic and derivation verifier)
+summary: >-
+  The upstream solve-and-audit pipeline over the computational claims
+  extracted from candidates. Certifies or declines each claim, not each
+  hypothesis.
+upstream:
+  repo: https://github.com/zaladbar/theoria.git
+  commit: 1721216053460f386c1408fd0971e84709ec6840
+  licence: Apache-2.0
+corpus_access: none
+invocation: external
+backend: codex-cli
+model: gpt-5.5, effort xhigh
+requires: {commands: [codex]}
+network:
+  policy: open
+  enforced_by: none; theoria web-searches cited results by design
+cost:
+  billing: subscription
+  provider: openai
+  note: measured 6.3M input (4.2M cached) and 165k output tokens, 22-35 min, per claim
+blocker: >-
+  takes claims, not candidates; runs through judge/theoria_adapter.py
+  and is not yet under this contract

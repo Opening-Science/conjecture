@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://opening.science/conjecture/hof-1.0.json",
+  "title": "Hypothesis Output Format (HOF) 1.0",
+  "description": "The one shape every engine connector must emit, so that engines built on different architectures become mechanically comparable and scoreable against the pack's verified claim register. Mirrors the register's shape so scoring is a join, not an interpretation.",
+  "type": "object",
+  "required": ["hof_version", "run", "hypotheses"],
+  "properties": {
+    "hof_version": {"const": "1.0"},
+    "run": {
+      "type": "object",
+      "required": ["engine", "seed_id", "backend", "config_hash"],
+      "properties": {
+        "engine": {"type": "string", "description": "connector name, e.g. baseline-claude, codex-solo, co-scientist"},
+        "engine_version": {"type": "string"},
+        "seed_id": {"type": "string", "description": "which seed brief this run answered, e.g. Q5"},
+        "backend": {"type": "string", "description": "inference backend actually used, e.g. claude-subagent, codex-cli, openai:gpt-4o"},
+        "config_hash": {"type": "string", "description": "hash over prompt template + parameters, so a run is reproducible"},
+        "started": {"type": "string"},
+        "corpus_calls": {"type": "integer", "description": "how many corpus_api queries the engine made"},
+        "notes": {"type": "string"}
+      }
+    },
+    "hypotheses": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "statement", "scope", "causal_level", "rationale", "cited_work_ids", "proposed_experiment"],
+        "properties": {
+          "id": {"type": "string", "description": "unique within the run"},
+          "statement": {
+            "type": "string",
+            "minLength": 40,
+            "description": "the claim, stated so it could be false"
+          },
+          "scope": {
+            "type": "object",
+            "description": "PICO-style scoping, so the null is a decision rule rather than a strawman",
+            "required": ["population", "condition", "outcome"],
+            "properties": {
+              "population": {"type": "string", "description": "organism/preparation/sample"},
+              "condition": {"type": "string", "description": "intervention and instrument regime (and band, where it matters)"},
+              "comparator": {"type": "string"},
+              "outcome": {"type": "string", "description": "the measured quantity"}
+            }
+          },
+          "null_hypothesis": {"type": "string", "description": "what a negative result looks like"},
+          "estimand": {"type": "string", "description": "the number that decides it"},
+          "causal_level": {
+            "enum": ["L1", "L2", "L3", "L4", "L5", "L6"],
+            "description": "the level in the pack's causal hierarchy (pack.yaml prompts.causal_levels), from L1 mechanism to L6 out-of-sample prediction. Witness totals are only comparable within a level."
+          },
+          "rationale": {
+            "type": "array",
+            "minItems": 1,
+            "description": "the reasoning decomposed into steps, so certification can judge each one. Mirrors theoria's proof object.",
+            "items": {
+              "type": "object",
+              "required": ["step", "justification_type"],
+              "properties": {
+                "step": {"type": "string"},
+                "justification_type": {
+                  "enum": ["citation", "computation", "given"],
+                  "description": "citation steps must resolve to work_ids in the corpus; computation steps must be checkable; given steps restate the seed"
+                },
+                "work_ids": {
+                  "type": "array",
+                  "items": {"type": "string"},
+                  "description": "required and non-empty when justification_type is citation"
+                }
+              }
+            }
+          },
+          "cited_work_ids": {
+            "type": "array",
+            "items": {"type": "string", "pattern": "^W[0-9]+$"},
+            "description": "every corpus work the hypothesis leans on; must exist in the corpus"
+          },
+          "proposed_experiment": {
+            "type": "string",
+            "minLength": 40,
+            "description": "the measurement that would settle it, concretely enough to cost"
+          },
+          "required_instrument": {"type": "string", "description": "instrument class (and band, where it matters); experiment cards map it to the pack's measurement areas"},
+          "engine_native_score": {
+            "type": ["number", "null"],
+            "description": "whatever the engine ranks by (Elo, reward, self-rating); not comparable across engines, recorded for the verifier benchmark"
+          },
+          "engine_native_rank": {"type": ["integer", "null"]},
+          "novelty_self_claim": {"type": "string", "description": "what the engine thinks is new about it; never trusted, always scored"}
+        }
+      }
+    }
+  }
+}

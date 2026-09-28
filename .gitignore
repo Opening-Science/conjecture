@@ -1,0 +1,11 @@
+# upstream engines, recreated at their pinned commits by
+# connectors/fetch_vendor.py
+vendor/
+# the toy pack is built, never committed
+conformance/work/
+conformance/toy_pack/*.sqlite
+conformance/toy_pack/seeds/
+conformance/toy_pack/candidates.json
+__pycache__/
+.env
+.DS_Store

@@ -1,0 +1,17 @@
+contract: 1
+kind: judge
+name: codex
+title: Codex judge
+summary: >-
+  judge_prompt.md over each chunk, on a different model family from the
+  Claude judges, so a certification is two families agreeing.
+upstream: {repo: null, commit: null, licence: n/a (native to the hub)}
+corpus_access: handed
+invocation: self-driving
+backend: codex-cli
+model: gpt-6-astra, effort high
+requires: {commands: [codex]}
+network:
+  policy: model-api-only
+  enforced_by: codex exec -s read-only and --ignore-user-config
+cost: {billing: subscription, provider: openai}

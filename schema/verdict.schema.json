@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://opening.science/conjecture/verdict-1.json",
+  "title": "Judge verdicts 1",
+  "description": "What every judge adapter returns for a batch of candidates: one verdict per candidate, in the certify-or-decline discipline of judge/judge_prompt.md.",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": ["candidate_id", "verdict", "failing_step", "grounded",
+                 "testable", "novel", "reason"],
+    "properties": {
+      "candidate_id": {"type": "string"},
+      "verdict": {"enum": ["certified", "pedantic", "declined"]},
+      "failing_step": {"type": ["integer", "null"], "minimum": 0},
+      "grounded": {"type": "boolean"},
+      "testable": {"type": "boolean"},
+      "novel": {"type": "boolean"},
+      "reason": {"type": "string", "minLength": 1}
+    }
+  }
+}

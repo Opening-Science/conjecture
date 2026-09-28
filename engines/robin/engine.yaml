@@ -1,0 +1,21 @@
+contract: 1
+kind: engine
+name: robin
+title: FutureHouse Robin (fork)
+summary: Assay-framed output with Bradley-Terry ranking.
+upstream:
+  repo: https://github.com/Future-House/robin.git
+  commit: 4a5cce310f3bc7663a67117db88af43b84733ffe
+  licence: Apache-2.0
+corpus_access: connector
+connector: connectors/corpus_tools.robin_call_platform
+invocation: self-driving
+backend: openai or anthropic API
+model: per config
+requires: {env_any: [OPENAI_API_KEY, ANTHROPIC_API_KEY]}
+network: {policy: model-api-only, enforced_by: connector replaces its platform literature calls}
+cost:
+  billing: api
+  provider: openai
+  tokens_per_hypothesis: {input: 500000, output: 25000}
+blocker: API key for the local reasoning calls

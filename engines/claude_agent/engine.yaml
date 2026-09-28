@@ -1,0 +1,27 @@
+contract: 1
+kind: engine
+name: baseline-claude
+title: Claude subagent, single agent + corpus CLI
+summary: >-
+  The Claude counterpart of codex-solo, same architecture, so scoreboard
+  differences are model-family differences. Runs as a subagent
+  dispatched in a Claude Code session.
+upstream: {repo: null, commit: null, licence: n/a (native to the hub)}
+corpus_access: cli
+invocation: handoff
+backend: claude-subagent
+model: Claude Code subagent, session model
+requires: {}
+network:
+  policy: open
+  enforced_by: >-
+    prompt instruction only; the dispatching session must withhold web
+    tools from the subagent
+cost:
+  billing: subscription
+  provider: anthropic
+  tokens_per_hypothesis: {input: 220000, output: 12000}
+notes: >-
+  Not reproducible without a Claude Code session: a nested claude -p
+  cannot authenticate inside one. With an Anthropic API key this becomes
+  a self-driving adapter.

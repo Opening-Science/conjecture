@@ -1,0 +1,23 @@
+contract: 1
+kind: engine
+name: co-scientist
+title: LLNL Open AI Co-Scientist
+summary: Elo tournament of simulated scientific debates.
+upstream:
+  repo: https://github.com/LLNL/open-ai-co-scientist.git
+  commit: c8342c0e28474d134f80caa6b9668470ebf55258
+  licence: MIT
+corpus_access: connector
+connector: connectors/corpus_tools.co_scientist_search
+invocation: self-driving
+backend: openrouter
+model: OpenRouter, model per config
+requires: {env: [OPENROUTER_API_KEY]}
+network: {policy: model-api-only, enforced_by: connector replaces its arXiv search}
+cost:
+  billing: api
+  provider: openrouter
+  tokens_per_hypothesis: {input: 900000, output: 40000}
+blocker: >-
+  OpenRouter key. As shipped, its search results never reach its agents;
+  the connector wires them into the prompts, and that part is unrun.

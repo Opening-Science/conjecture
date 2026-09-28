@@ -1,0 +1,22 @@
+contract: 1
+kind: engine
+name: ai-scientist-v2
+title: Sakana AI Scientist v2 (ideation stage)
+summary: Ideation with reflection loops.
+upstream:
+  repo: https://github.com/SakanaAI/AI-Scientist-v2.git
+  commit: 96bd51617cfdbb494a9fc283af00fe090edfae48
+  licence: The AI Scientist Source Code License 1.0 (not OSI open source)
+  output_terms: generated output must be labelled machine-generated
+corpus_access: connector
+connector: connectors/corpus_tools.ai_scientist_tool
+invocation: self-driving
+backend: openai or anthropic API
+model: per config
+requires: {env_any: [OPENAI_API_KEY, ANTHROPIC_API_KEY]}
+network: {policy: model-api-only, enforced_by: connector subclasses its BaseTool in place of Semantic Scholar}
+cost:
+  billing: api
+  provider: openai
+  tokens_per_hypothesis: {input: 600000, output: 30000}
+blocker: API key; licence gate on output

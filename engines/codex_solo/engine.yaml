@@ -1,0 +1,24 @@
+contract: 1
+kind: engine
+name: codex-solo
+title: Codex, single agent + corpus CLI
+summary: >-
+  One Codex agent, one pass, corpus through corpus_api.py in a read-only
+  shell. The control every multi-agent engine must beat, on a model
+  family that is not Claude.
+upstream: {repo: null, commit: null, licence: n/a (native to the hub)}
+corpus_access: cli
+invocation: self-driving
+backend: codex-cli
+model: gpt-6-astra, effort high
+requires: {commands: [codex]}
+network:
+  policy: model-api-only
+  enforced_by: >-
+    codex exec -s read-only (no network in the sandbox) and
+    --ignore-user-config (no plugins, browser or web search)
+cost:
+  billing: subscription
+  provider: openai
+  tokens_per_hypothesis: {input: 180000, output: 9000}
+  note: ChatGPT subscription via the Codex CLI; no per-token bill

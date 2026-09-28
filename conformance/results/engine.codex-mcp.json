@@ -1,0 +1,50 @@
+{
+ "kind": "engine",
+ "name": "codex-mcp",
+ "pack": "toy",
+ "commit": "0c1f007",
+ "date": "2026-09-28",
+ "manifest_sha": "094b43a9c896",
+ "adapter_sha": "efadcc21a728",
+ "status": "pass",
+ "checks": [
+  {
+   "check": "hof",
+   "ok": true,
+   "detail": "4 hypotheses",
+   "seed": "T1"
+  },
+  {
+   "check": "schema",
+   "ok": true,
+   "detail": "",
+   "seed": "T1"
+  },
+  {
+   "check": "citations",
+   "ok": true,
+   "detail": "10 distinct works cited",
+   "seed": "T1"
+  },
+  {
+   "check": "corpus_used",
+   "ok": true,
+   "detail": "33 calls logged by the hub",
+   "seed": "T1"
+  },
+  {
+   "check": "no_outside",
+   "ok": true,
+   "detail": "only toy-corpus ids cited; no web tool, curl or wget",
+   "seed": "T1"
+  }
+ ],
+ "info": {
+  "T1": {
+   "elapsed_s": 169.4,
+   "n_hypotheses": 4,
+   "corpus_calls": 33,
+   "hof_warnings": []
+  }
+ }
+}

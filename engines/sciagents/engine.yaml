@@ -1,0 +1,20 @@
+contract: 1
+kind: engine
+name: sciagents
+title: SciAgents (MIT Buehler lab)
+summary: Knowledge-graph traversal; its native input matches the field map.
+upstream:
+  repo: https://github.com/lamm-mit/SciAgentsDiscovery.git
+  commit: c5c30451b29cba813a11b5ce078909a214dad9f2
+  licence: Apache-2.0
+corpus_access: none
+invocation: self-driving
+backend: openai API
+model: per config
+requires: {env: [OPENAI_API_KEY]}
+network: {policy: model-api-only, enforced_by: not yet designed}
+cost:
+  billing: api
+  provider: openai
+  tokens_per_hypothesis: {input: 700000, output: 30000}
+blocker: needs a .graphml and node-embedding export of the pack, not a search swap

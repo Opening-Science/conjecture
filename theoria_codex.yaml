@@ -1,0 +1,32 @@
+# Route every theoria role through the Codex backend.
+#
+# theoria's audited setup uses `claude -p`, but a nested Claude CLI cannot
+# authenticate from inside a Claude Code session, so the judges fail before
+# they judge anything. Codex carries its own auth and is what actually runs
+# here. This changes which model family audits — recorded, because that is
+# exactly the variable the self-preference result says matters.
+solver:        {backend: codex}
+interpreter:   {backend: codex}
+formalizer:    {backend: codex}
+citation:      {backend: codex}
+problem_given: {backend: codex}
+computation:   {backend: codex}
+pedantry:      {backend: codex}
+convention_lift: {backend: codex}
+initial_state: {backend: codex}
+
+# The audited setup runs each problem in a Docker container and describes
+# that container to every agent. We run with --no-docker (Docker is not
+# installed on this host), which leaves defaults.yaml's Debian-container
+# description in place — an environment that did not exist. Measured
+# effect in pass 1: 52 calls, zero tool invocations; agents "verified"
+# arithmetic by mental math while believing in a phantom sandbox.
+# This override tells them the truth about where they actually are.
+_preamble: |
+  Environment: you are running on a macOS host through the Codex CLI's
+  read-only sandbox. You CAN execute shell commands with read-only
+  effects — in particular `python3 -c '...'` (sympy, numpy, scipy and
+  pandas are installed) for arithmetic, algebra and numerical checks.
+  You cannot write files, install packages, or reach the network.
+  When a number or derivation matters, verify it by actually running
+  python3 rather than by mental arithmetic, and state what you ran.

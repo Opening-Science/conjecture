@@ -1,0 +1,50 @@
+{
+ "kind": "engine",
+ "name": "codex-solo",
+ "pack": "toy",
+ "commit": "0c1f007",
+ "date": "2026-09-28",
+ "manifest_sha": "10e0b3b39eae",
+ "adapter_sha": "afb3ce7fc745",
+ "status": "pass",
+ "checks": [
+  {
+   "check": "hof",
+   "ok": true,
+   "detail": "5 hypotheses",
+   "seed": "T1"
+  },
+  {
+   "check": "schema",
+   "ok": true,
+   "detail": "",
+   "seed": "T1"
+  },
+  {
+   "check": "citations",
+   "ok": true,
+   "detail": "9 distinct works cited",
+   "seed": "T1"
+  },
+  {
+   "check": "corpus_used",
+   "ok": true,
+   "detail": "22 calls logged by the hub",
+   "seed": "T1"
+  },
+  {
+   "check": "no_outside",
+   "ok": true,
+   "detail": "only toy-corpus ids cited; no web tool, curl or wget",
+   "seed": "T1"
+  }
+ ],
+ "info": {
+  "T1": {
+   "elapsed_s": 188.3,
+   "n_hypotheses": 5,
+   "corpus_calls": 22,
+   "hof_warnings": []
+  }
+ }
+}

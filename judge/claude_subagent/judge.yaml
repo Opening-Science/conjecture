@@ -1,0 +1,18 @@
+contract: 1
+kind: judge
+name: claude-subagent
+title: Claude judges (subagents)
+summary: >-
+  The same prompt and chunks, judged by Claude Code subagents. Several
+  independent passes run under distinct labels (claude-a, claude-b, ...).
+upstream: {repo: null, commit: null, licence: n/a (native to the hub)}
+corpus_access: handed
+invocation: handoff
+backend: claude-subagent
+model: Claude Code subagent, session model
+requires: {}
+network:
+  policy: open
+  enforced_by: prompt instruction only; the dispatching session must withhold web tools
+cost: {billing: subscription, provider: anthropic}
+labels: [claude-a, claude-b, claude-c]

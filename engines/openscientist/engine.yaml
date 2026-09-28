@@ -1,0 +1,21 @@
+contract: 1
+kind: engine
+name: openscientist
+title: OpenScientist (LBNL)
+summary: Generate-and-test platform with relational provenance.
+upstream:
+  repo: null
+  homepage: https://openscientist.io
+  commit: null
+  licence: Apache-2.0
+corpus_access: none
+invocation: external
+backend: platform
+model: Claude via an enterprise provider
+requires: {}
+network: {policy: open, enforced_by: not yet designed}
+cost:
+  billing: api
+  provider: anthropic
+  tokens_per_hypothesis: {input: 400000, output: 20000}
+blocker: a platform, not a library; needs the corpus ingested into its Postgres mirror

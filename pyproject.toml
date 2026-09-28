@@ -1,0 +1,13 @@
+[project]
+name = "conjecture-hub"
+version = "0.1.0"
+description = "Conjecture: the Open Science Foundation hypothesis hub"
+readme = "README.md"
+license = "Apache-2.0"
+requires-python = ">=3.11"
+dependencies = ["pyyaml>=6", "jsonschema>=4.20"]
+
+# The hub runs as scripts from a checkout for now (see README); this file
+# declares its metadata and dependencies. Packaging for PyPI comes later.
+[tool.setuptools]
+py-modules = []

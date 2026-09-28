@@ -1,0 +1,50 @@
+# Conjecture toy pack: the conformance fixture.
+#
+# A fictional field (the cave moss Lumobrya lucens does not exist) with
+# 50 invented works, built by build.py. Small enough to run a real
+# engine against in minutes; unknowable from outside, so every grounded
+# claim has to come from this corpus. The .sqlite files and seeds/ are
+# built, not committed: conformance.py builds a fresh copy per run.
+
+pack_version: 1
+name: toy
+title: Toy pack (fictional luminescent cave moss, 50 works)
+
+corpus:
+  knowledgebase: knowledgebase.sqlite
+  fieldmap: fieldmap.sqlite
+  n_works: 50
+
+questions:
+  source: questions.md
+  entry_queries:
+    T1: [glow signal byproduct, gnats attracted glow, glow respiration]
+    T2: [laboratory disagreement intensity, reference light source,
+         dark counts cooling]
+
+prompts:
+  domain: the luminescence of the cave moss Lumobrya lucens
+  causal_levels: |-
+    L1 generation mechanism | L2 emitted light | L3 propagation |
+    L4 receiver effects | L5 correlational measurement | L6 prediction
+  causal_level_labels:
+    L1: generation mechanism
+    L2: emitted light
+    L3: propagation
+    L4: receiver effects
+    L5: correlational measurement
+    L6: prediction
+  verifier_setting: >-
+    biology experiment on the glow of a moss (of order 1e6 photons per
+    second per square centimetre)
+
+measurement_areas:
+  - pattern: '\bphotomultiplier|photodiode|camera\b'
+    area: Detectors
+  - pattern: '\breference|calibrat|laborator\b'
+    area: Calibration and comparison
+
+outputs:
+  dir: outputs
+
+state: .

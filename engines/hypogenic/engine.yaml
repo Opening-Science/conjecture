@@ -1,0 +1,21 @@
+contract: 1
+kind: engine
+name: hypogenic
+title: HypoGeniC (ChicagoHAI)
+summary: Data-driven hypothesis bank scored on labelled accuracy.
+upstream:
+  repo: https://github.com/ChicagoHAI/hypothesis-generation.git
+  commit: bd37a3129a2f98ee586f545a57b10b59496eedad
+  licence: MIT
+corpus_access: connector
+connector: connectors/corpus_tools.hypogenic_paper_infos
+invocation: self-driving
+backend: openai or anthropic API
+model: per config
+requires: {env_any: [OPENAI_API_KEY, ANTHROPIC_API_KEY]}
+network: {policy: model-api-only, enforced_by: LiteratureAgent fed paper_infos from the corpus}
+cost:
+  billing: api
+  provider: openai
+  tokens_per_hypothesis: {input: 300000, output: 15000}
+blocker: API key

@@ -1,0 +1,35 @@
+{
+ "kind": "judge",
+ "name": "codex",
+ "pack": "toy",
+ "commit": "0c1f007",
+ "date": "2026-09-28",
+ "manifest_sha": "565bead9d237",
+ "adapter_sha": "f17a8537a26c",
+ "status": "pass",
+ "checks": [
+  {
+   "check": "parsed",
+   "ok": true,
+   "detail": "3 verdicts"
+  },
+  {
+   "check": "verdicts",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "miscitation",
+   "ok": null,
+   "detail": "planted miscitation C2 was declined"
+  }
+ ],
+ "info": {
+  "elapsed_s": 20.0,
+  "verdicts": {
+   "C1": "certified",
+   "C2": "declined",
+   "C3": "declined"
+  }
+ }
+}

@@ -1,0 +1,50 @@
+{
+ "kind": "engine",
+ "name": "reference",
+ "pack": "toy",
+ "commit": "0c1f007",
+ "date": "2026-09-28",
+ "manifest_sha": "6c1c17724494",
+ "adapter_sha": "0f4e55e5d49b",
+ "status": "pass",
+ "checks": [
+  {
+   "check": "hof",
+   "ok": true,
+   "detail": "3 hypotheses",
+   "seed": "T1"
+  },
+  {
+   "check": "schema",
+   "ok": true,
+   "detail": "",
+   "seed": "T1"
+  },
+  {
+   "check": "citations",
+   "ok": true,
+   "detail": "3 distinct works cited",
+   "seed": "T1"
+  },
+  {
+   "check": "corpus_used",
+   "ok": true,
+   "detail": "6 calls logged by the hub",
+   "seed": "T1"
+  },
+  {
+   "check": "no_outside",
+   "ok": true,
+   "detail": "only toy-corpus ids cited; no web tool, curl or wget",
+   "seed": "T1"
+  }
+ ],
+ "info": {
+  "T1": {
+   "elapsed_s": 0.1,
+   "n_hypotheses": 3,
+   "corpus_calls": 6,
+   "hof_warnings": []
+  }
+ }
+}

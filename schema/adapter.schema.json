@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://opening.science/conjecture/adapter-1.json",
+  "title": "Conjecture adapter manifest 1",
+  "description": "engine.yaml / judge.yaml: what an engine or judge is, where it comes from, how it reaches the corpus, what it needs to run and what it costs. The hub reads nothing else about an adapter; the status table is generated from these plus conformance results.",
+  "type": "object",
+  "required": ["contract", "kind", "name", "title", "summary", "upstream",
+               "corpus_access", "invocation", "backend", "model",
+               "requires", "network", "cost"],
+  "additionalProperties": false,
+  "properties": {
+    "contract": {"const": 1},
+    "kind": {"enum": ["engine", "judge"]},
+    "name": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$",
+             "description": "run.engine in HOF, or the judge label in verdicts.<name>.json"},
+    "title": {"type": "string"},
+    "summary": {"type": "string"},
+    "upstream": {
+      "type": "object",
+      "required": ["repo", "commit", "licence"],
+      "additionalProperties": false,
+      "properties": {
+        "repo": {"type": ["string", "null"], "description": "git URL; null for engines native to the hub"},
+        "homepage": {"type": "string"},
+        "commit": {"type": ["string", "null"], "pattern": "^[0-9a-f]{40}$",
+                   "description": "the commit the adapter was verified against"},
+        "licence": {"type": "string", "description": "SPDX id, or a short name for non-SPDX licences"},
+        "output_terms": {"type": "string", "description": "conditions the licence puts on generated output"}
+      }
+    },
+    "corpus_access": {
+      "enum": ["cli", "mcp", "connector", "handed", "none"],
+      "description": "cli: corpus_api.py in a shell; mcp: mcp_server.py; connector: a shim replacing the engine's own retrieval (connectors/corpus_tools.py); handed: the hub passes the text in (judges); none: needs no corpus"
+    },
+    "invocation": {
+      "enum": ["self-driving", "handoff", "external"],
+      "description": "self-driving: the adapter runs to completion unattended; handoff: the adapter emits a task for an agent outside the hub and collects its answer; external: runs through its own script, not yet under this contract"
+    },
+    "backend": {"type": "string"},
+    "model": {"type": "string"},
+    "requires": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "commands": {"type": "array", "items": {"type": "string"}},
+        "env": {"type": "array", "items": {"type": "string"},
+                "description": "every one must be set"},
+        "env_any": {"type": "array", "items": {"type": "string"},
+                    "description": "at least one must be set"}
+      }
+    },
+    "network": {
+      "type": "object",
+      "required": ["policy", "enforced_by"],
+      "additionalProperties": false,
+      "properties": {
+        "policy": {"enum": ["none", "model-api-only", "open"]},
+        "enforced_by": {"type": "string"}
+      }
+    },
+    "cost": {
+      "type": "object",
+      "required": ["billing"],
+      "additionalProperties": false,
+      "properties": {
+        "billing": {"enum": ["free", "subscription", "api"]},
+        "provider": {"type": "string"},
+        "tokens_per_hypothesis": {
+          "type": "object",
+          "properties": {"input": {"type": "integer"},
+                         "output": {"type": "integer"}}},
+        "note": {"type": "string"}
+      }
+    },
+    "labels": {"type": "array", "items": {"type": "string"},
+               "description": "judges only: the verdicts.<label>.json files this judge's passes are written under, when not just its name"},
+    "connector": {"type": "string", "description": "for corpus_access connector: the shim, as module.function"},
+    "blocker": {"type": "string", "description": "why it cannot run yet, when it cannot"},
+    "notes": {"type": "string"}
+  }
+}
