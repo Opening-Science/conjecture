@@ -96,7 +96,12 @@ class Pack:
 # overlay's paths are relative to the overlay and a base's to the base
 PATH_FIELDS = [("corpus", "knowledgebase"), ("corpus", "fieldmap"),
                ("questions", "source"), ("outputs", "dir"),
-               ("outputs", "inventory"), ("outputs", "ledger"), ("state",)]
+               ("outputs", "inventory"), ("outputs", "ledger"), ("state",),
+               # the corpus builder's (builder/config.py)
+               ("build", "seeds"),
+               *(("build", "paths", k) for k in
+                 ("workdir", "cache", "exports", "literature", "index",
+                  "run_log"))]
 
 
 def _merge(base: dict, over: dict) -> dict:

@@ -1,0 +1,12 @@
+# The corpus builder (builder/), on top of requirements.txt. Separate
+# because two of these carry copyleft licences that the hub itself
+# (Apache-2.0) does not: installing them is the builder user's choice.
+httpx>=0.27            # BSD-3-Clause
+tenacity>=8            # Apache-2.0
+pandas>=2              # BSD-3-Clause
+pyarrow>=14            # Apache-2.0
+numpy>=1.26            # BSD-3-Clause
+rapidfuzz>=3           # MIT
+tqdm>=4                # MIT / MPL-2.0
+Unidecode>=1.3         # GPL-2.0-or-later: name keys, title matching, file names
+PyMuPDF>=1.24          # AGPL-3.0 (or commercial): PDF text, stages J and refs
