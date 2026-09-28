@@ -86,6 +86,8 @@ def resolve_works(rows: list[dict]) -> dict:
         }
     for wid in ids:                       # cited but not in the knowledgebase
         works.setdefault(wid, {"id": wid, "missing": True})
+    # id order, not row order: the same ledger from any build of a corpus
+    works = dict(sorted(works.items()))
     n_missing = sum(1 for w in works.values() if w.get("missing"))
     print(f"  resolved {len(works) - n_missing}/{len(works)} cited works"
           f"{f' ({n_missing} not in knowledgebase)' if n_missing else ''}")
