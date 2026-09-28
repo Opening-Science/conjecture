@@ -94,6 +94,19 @@ rendered outputs go. `CONJECTURE_PACK=/path/to/pack.yaml` hydrates the
 hub with a field. Template text from the pack is filled in before hashing, so
 `config_hash` identifies the rendered prompt.
 
+A `pack.yaml` can extend another and override only what differs:
+
+```yaml
+# a maintainer's workspace: the published pack, with the full-text corpus
+extends: pack/pack.yaml
+corpus:
+  knowledgebase: literature/knowledgebase.sqlite
+```
+
+Dicts merge key by key and anything else replaces; each path resolves
+against the file that sets it. Runs, questions and outputs stay where
+the base pack puts them.
+
 The pack also owns its run state (`state:` in `pack.yaml`): seeds,
 engine runs and their transcripts, merge clusters, judge chunks and
 verdicts, `audit.db`, `scoreboard.json` and the verifier bench. The hub

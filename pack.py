@@ -7,7 +7,8 @@ framing in prompts, the measurement areas experiment cards map to) comes
 from one pack.yaml.
 
 Which pack: $CONJECTURE_PACK if set (path to a pack.yaml), otherwise the
-nearest pack.yaml found walking up from this directory.
+nearest pack.yaml found walking up from this directory. A pack.yaml can
+extend another and override parts of it (see read_raw).
 
     from pack import PACK
     PACK.knowledgebase          # Path
@@ -91,9 +92,49 @@ class Pack:
         return self.state_dir / "scoreboard.json"
 
 
+# fields holding paths: resolved against the file that sets them, so an
+# overlay's paths are relative to the overlay and a base's to the base
+PATH_FIELDS = [("corpus", "knowledgebase"), ("corpus", "fieldmap"),
+               ("questions", "source"), ("outputs", "dir"),
+               ("outputs", "inventory"), ("outputs", "ledger"), ("state",)]
+
+
+def _merge(base: dict, over: dict) -> dict:
+    out = dict(base)
+    for k, v in over.items():
+        out[k] = (_merge(base[k], v) if isinstance(v, dict)
+                  and isinstance(base.get(k), dict) else v)
+    return out
+
+
+def read_raw(path: Path, _seen: tuple = ()) -> dict:
+    """A pack file as a dict, path fields absolute, overlays applied.
+
+    A pack file may start with `extends: <path to another pack.yaml>` and
+    set only what differs; dicts merge key by key, anything else
+    replaces. The use: a maintainer's workspace points a published pack
+    at a local corpus (full text the release cannot carry) while runs,
+    questions and outputs stay in the pack.
+    """
+    path = path.resolve()
+    if path in _seen:
+        raise ValueError(f"{path}: extends loop")
+    raw = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    for keys in PATH_FIELDS:
+        node = raw
+        for k in keys[:-1]:
+            node = node.get(k) if isinstance(node, dict) else None
+        if isinstance(node, dict) and node.get(keys[-1]):
+            node[keys[-1]] = str((path.parent / node[keys[-1]]).resolve())
+    parent = raw.pop("extends", None)
+    if parent:
+        raw = _merge(read_raw(path.parent / parent, _seen + (path,)), raw)
+    return raw
+
+
 def load(path: Path | None = None) -> Pack:
-    path = path or locate()
-    raw = yaml.safe_load(path.read_text(encoding="utf-8"))
+    path = (path or locate()).resolve()
+    raw = read_raw(path)
     if raw.get("pack_version") != SUPPORTED_VERSION:
         raise ValueError(f"{path}: pack_version {raw.get('pack_version')!r}"
                          f", hub supports {SUPPORTED_VERSION}")
