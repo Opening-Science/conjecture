@@ -1,0 +1,572 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Conjecture run panel — Open Science Foundation</title>
+<link rel="stylesheet" href="style.css?v=1787786870"></head><body>
+<header><div class="bar">
+<a class="logo" href="#"><img src="img/osf-logo.svg" alt="Open Science Foundation"></a>
+<span class="prod"><span class="t1">Conjecture</span>
+<span class="t2">hypothesis hub · run panel</span></span>
+<nav>
+<button data-p="overview" class="on">Overview</button>
+<button data-p="corpus">Corpus</button>
+<button data-p="sources">Sources &amp; licences</button>
+<button data-p="run">Run</button>
+<button data-p="results">Hypotheses</button>
+<button data-p="verification">Verification</button>
+</nav></div></header>
+<main>
+
+<!-- ================= OVERVIEW ================= -->
+<section id="p-overview">
+<h1>Which open hypothesis engine should a field <span class="blue">trust</span>?</h1>
+<p class="lede">A growing number of open systems claim to generate scientific hypotheses — seven
+are surveyed here. None has been compared with another on the same literature, with the same
+prompt, under the same rules, and almost all of them mark their own homework. This is a harness that makes them comparable, points
+them at a corpus you supply, and ends every run with verification performed by something that did
+not do the generating.</p>
+
+<div class="grid">
+<div class="card"><b>Compare</b><span>Any open engine, one interface, one prompt, one output format</span></div>
+<div class="card"><b>Any corpus</b><span>Bring a seed bibliography; the harness builds the literature universe around it</span></div>
+<div class="card"><b>Verify</b><span>Independent certify-or-decline audit, never by the generating model</span></div>
+<div class="card"><b>Measure</b><span>Scored against ground truth where a field has any</span></div>
+</div>
+
+<p class="label">Rationale</p>
+<h2>Same literature, same question, same rules</h2>
+<p>The published record on these systems cannot be compared, because nothing in it is held
+constant: each engine is demonstrated on its authors&rsquo; choice of corpus, with its authors&rsquo;
+prompt, through its own retrieval path, and judged &mdash; usually &mdash; by the model that did the
+generating. Three absences, specifically:</p>
+<table><tbody>
+<tr><th>No common ground</th><td>A different corpus and prompt per system, so a published result cannot say whether an architecture is better or merely better-suited to the example its authors chose.</td></tr>
+<tr><th>Self-verification</th><td>Reflection loops, simulated debate, self-scoring: the model that generated is the model that judges.</td></tr>
+<tr><th>No ground truth</th><td>Quality is assessed by asking a model whether it is impressed. Where a field holds verified evidence labels, a verifier can be scored instead of admired.</td></tr>
+</tbody></table>
+<p>The harness removes every difference except the one worth measuring. Engines read the
+literature only through one read-only corpus API &mdash; no web access, no private retrieval &mdash;
+answer the identical brief, and return one output schema. What may differ is architecture and model
+family. What may not differ is the question, the evidence, or the shape of the answer. And the
+verdict on a hypothesis is never given by the family that wrote it, because we measured what
+self-judging costs:</p>
+
+<div class="note bad"><strong>The finding that forced the design.</strong> Both judge families in
+the first pack&rsquo;s first run (biophotons) preferred hypotheses written by their own family: the Claude judges by 12 points, the
+Codex judge by <strong>40</strong> (45% pass rate on its own family&rsquo;s output against 5% on the
+other&rsquo;s). If one engine simply wrote better hypotheses, both judges would have ranked it
+higher &mdash; instead each ranked its own higher, which is the signature of self-preference rather
+than quality. A self-verified certification rate is therefore not a measurement, and
+single-family pipelines&rsquo; published scores are not comparable with each other.
+<a href="#" data-goto="verification">See the measurement &rarr;</a></div>
+
+<p class="label">Pipeline</p>
+<h2>How a run works</h2>
+<pre><code>1  CORPUS        seed bibliography  →  citation expansion  →  clustering  →  full-text mining
+                 you supply the seed; the harness builds the universe and the search index
+
+2  SEEDS         open questions the field states about itself, plus gaps in its claim registry
+                 each becomes a structured brief every engine receives identically
+
+3  GENERATION    N engines, one shared prompt, one read-only corpus API, no web access
+                 engines retrieve agentically; retrieval behaviour is part of what is compared
+
+4  MERGE         cluster across engines, keep provenance
+                 independent arrival at the same claim is signal; contradictions are gold
+
+5  VERIFICATION  decompose each claim into steps, audit every step against the cited papers,
+                 certify or decline — by a family that did not generate
+
+6  OUTPUT        experiment cards, a scoreboard, and an audit database with the queries
+                 that regenerate every published number</code></pre>
+
+<p class="label">Getting started</p>
+<h2>What you need to start</h2>
+<p>One thing: a seed bibliography for the field you care about. Everything else is built from it.
+The <a href="#" data-goto="corpus">Corpus</a> page walks the full method, stage by stage, and takes
+the upload.</p>
+
+<div class="note"><strong>This panel is serving the pack <em data-pack="title"></em>.</strong>
+The hub is field-agnostic; a pack supplies the corpus, the questions and the run history. The first
+pack, biophotons (ultraweak photon emission), was chosen because the field is small enough to map
+completely, contested enough that hypothesis quality matters, and already carries a verified claim
+registry that can serve as ground truth. The <a href="#" data-goto="results">Results</a> and
+<a href="#" data-goto="verification">Verification</a> pages report whichever pack is loaded.</div>
+
+<div class="note warn" id="hub-status"></div>
+</section>
+
+<!-- ================= CORPUS ================= -->
+<section id="p-corpus" class="hide">
+<h1>Build the corpus for a run</h1>
+<p class="lede">An engine is only as good as what it is allowed to read. This is the method that
+built the biophoton pack, reproduced end to end: a curated seed bibliography becomes a mapped publication
+universe, a clustered field structure, a mined statement corpus and a searchable knowledgebase.
+Bring the seed; the harness does the rest.</p>
+
+<p class="label">Intake</p>
+<h2>1. Intake — your seed bibliography</h2>
+<div class="two">
+<div class="sel">
+<h3 style="margin-top:0">Upload</h3>
+<p style="font-size:.9rem;color:var(--muted);margin-top:0">A Zotero or Mendeley export, a
+reference-manager CSV, a BibTeX or RIS file, or a plain list of DOIs. Parsed in your browser —
+nothing is uploaded anywhere.</p>
+<input type="file" id="seedfile" accept=".csv,.bib,.ris,.txt,.json,.tsv">
+<div id="parse-out" style="margin-top:.9rem"></div>
+</div>
+<div class="sel">
+<h3 style="margin-top:0">Run parameters</h3>
+<label class="opt"><span style="flex:1"><span class="t">Corpus name</span>
+<span class="d">used for directories and the run manifest</span></span>
+<input type="text" id="cname" value="my-field" style="width:9rem"></label>
+<label class="opt"><span style="flex:1"><span class="t">Expansion hops</span>
+<span class="d">2 reproduces the biophoton pack (18,355 works from 245 seeds)</span></span>
+<select id="hops"><option>1</option><option selected>2</option><option>3</option></select></label>
+<label class="opt"><span style="flex:1"><span class="t">Mine full texts</span>
+<span class="d">open-access PDFs → sentences, open-problem statements</span></span>
+<input type="checkbox" id="ft" checked></label>
+<label class="opt"><span style="flex:1"><span class="t">Build claim registry</span>
+<span class="d">hand-curated claims + evidence linkage; needed for ground-truth scoring</span></span>
+<input type="checkbox" id="reg" checked></label>
+<label class="opt"><span style="flex:1"><span class="t">Openness overlay (stage E)</span>
+<span class="d">analysis only — no engine reads it. Safe to skip.</span></span>
+<input type="checkbox" id="openness"></label>
+</div>
+</div>
+<div class="sel" style="margin-top:30px">
+<h3 style="margin-top:0">Closed-access and hand-collected PDFs</h3>
+<p style="font-size:var(--text-sm);color:var(--color-gray);margin-top:0">Stage I harvests
+open-access PDFs automatically. Everything else — paywalled papers, book chapters, scans, anything
+obtained by hand — has to be supplied. Drop them here to generate the manifest and the ingest
+commands. Files are read for name and size only; nothing is uploaded.</p>
+<input type="file" id="pdffiles" accept=".pdf" multiple>
+<div id="pdf-out" style="margin-top:16px"></div>
+</div>
+<div id="corpus-cmd" style="margin-top:30px"></div>
+
+<p class="label">Method</p>
+<h2>2. The method, stage by stage</h2>
+<p>Each stage is idempotent and cached, so a rerun is free and a failure resumes rather than
+restarts. Stage letters are the ones used in the reference implementation.</p>
+<table><thead><tr><th>Stage</th><th>What it does</th><th>Output</th></tr></thead><tbody>
+<tr><td><strong>A</strong> resolve</td><td>Match every seed reference to a canonical work id. Unresolvable entries are reported, not silently dropped.</td><td>seed work ids</td></tr>
+<tr><td><strong>B</strong> expand</td><td>Backward and forward citation expansion to the chosen hop depth, with pruning. This is what turns a reading list into a field.</td><td>the publication universe</td></tr>
+<tr><td><strong>C</strong> normalise</td><td>Works, authors, institutions, topics and citation edges into one relational store.</td><td><code>fieldmap.sqlite</code></td></tr>
+<tr><td><strong>D</strong> network</td><td>Co-authorship, bibliographic-coupling and co-citation graphs, then <strong>Leiden community detection</strong> — chosen over Louvain because Leiden guarantees well-connected communities, which Louvain does not (Traag, Waltman &amp; van Eck 2019, <em>Sci. Rep.</em> 9:5233, <code>10.1038/s41598-019-41695-z</code>). Cluster membership is a function of shared references and nothing else — no keyword filter, no model, no editorial hand.</td><td>communities, sub-strands</td></tr>
+<tr><td><strong>E</strong> openness <span class="pill">optional</span></td><td>Per-work and per-author open-access and open-data scoring. An <strong>analysis overlay, not a prerequisite</strong> — no engine reads it and the corpus API does not expose it. Run it if you want to characterise how open the field is; skip it and everything downstream still works.</td><td>openness overlay</td></tr>
+<tr><td><strong>I</strong> harvest</td><td>Fetch every open-access PDF the universe contains. Resumable.</td><td>local full texts</td></tr>
+<tr><td><strong>J</strong> mine</td><td>Extract text and mine the sentences where the field states what it does <em>not</em> know — the raw material for run seeds.</td><td>statement corpus</td></tr>
+<tr><td><strong>K</strong> knowledgebase</td><td>One joined, FTS5-searchable store over titles, abstracts and full text. This is what the corpus API serves to engines.</td><td><code>knowledgebase.sqlite</code></td></tr>
+<tr><td><strong>M</strong> registry</td><td>The field's canonical claims as scoped hypotheses with explicit nulls, linked to every sentence that supports, refutes or discusses them. Optional, but it is what makes ground-truth scoring possible.</td><td>claim registry + evidence</td></tr>
+</tbody></table>
+
+<div class="note"><strong>The registry is the expensive part, and the valuable one.</strong> In
+the biophoton pack it holds 15 scoped claims, 861 adversarially verified stance labels and 467 entailment
+judgments. Without it you can still generate and certify hypotheses; with it you can also measure
+whether an engine rediscovers what the field already believes, and whether a <em>verifier</em> is
+any good. Most fields have no such artefact, which is why verifier benchmarking has not been done
+before.</div>
+
+<p class="label">Interface</p>
+<h2>3. What the corpus API exposes</h2>
+<p>Engines never touch the database. They see four calls, and nothing else.</p>
+<pre><code>search(query, limit, year_max)   full-text over title, abstract and body
+get_work(work_id)                one record
+statements(work_id, kind)        mined open-problem sentences
+neighbors(work_id)               citing / cited within the universe</code></pre>
+<p><code>year_max</code> exists so novelty can be scored honestly: restrict an engine to
+literature before a cutoff, then check its "new" hypotheses against what was actually published
+afterwards.</p>
+</section>
+
+<!-- ================= SOURCES ================= -->
+<section id="p-sources" class="hide">
+<h1>Sources &amp; licences</h1>
+<p class="lede">Everything the harness reads or runs, and the terms it comes under. One engine
+carries a licence that restricts what may be published from its output; it is flagged.</p>
+
+<p class="label">Data</p>
+<h2>Corpus and data</h2>
+<table><thead><tr><th>Source</th><th>What it provides</th><th>Licence / terms</th></tr></thead><tbody>
+<tr><td><strong>OpenAlex</strong></td><td>The publication universe and citation graph. In the biophoton pack: 18,355 works, 39,312 authors, ~265,000 intra-universe edges.</td><td><span class="pill ok">CC0</span></td></tr>
+<tr><td><strong>Your seed bibliography</strong></td><td>The starting point for expansion. Metadata only.</td><td><span class="pill">Yours</span></td></tr>
+<tr><td><strong>Full texts</strong></td><td>Open-access PDFs, mined at sentence level.</td><td><span class="pill warn">Publisher © retained</span> short quoted excerpts, attributed</td></tr>
+<tr><td><strong>Derived field map</strong></td><td>Clustering and openness overlays for the biophoton pack.</td><td><span class="pill ok">CC0 1.0</span> <code>10.5281/zenodo.21466492</code></td></tr>
+<tr><td><strong>Claim registry</strong></td><td>Scoped claims, verified stance labels, entailment tier — the ground truth.</td><td><span class="pill ok">CC0</span></td></tr>
+</tbody></table>
+
+<p class="label">Engines</p>
+<h2>Hypothesis engines</h2>
+<p style="font-size:.92rem;color:var(--muted);max-width:78ch">Licence, status, and — behind
+<em>Learn more</em> on each row — what the architecture does, which seam this harness replaces to
+point it at our corpus, and the sources the description draws on.</p>
+
+<div class="engtable">
+<div class="enghead"><span>Engine</span><span>Architecture</span><span>Licence</span>
+<span>Status</span><span></span></div>
+<details class="eng"><summary>
+<span class="nm">Codex CLI</span><span class="arch">Single agent + tools</span>
+<span><span class="pill">Vendor CLI</span></span><span data-status="codex-solo"></span><span class="more">Learn more</span></summary>
+<div class="body"><p>The control condition, and deliberately the least clever thing here: one agent, one pass,
+tool access to the corpus. It searches, reads, searches again, writes. No tournament, no critic,
+no second opinion.</p>
+<p>It exists so every multi-agent architecture has something to beat. An elaborate system that
+cannot outperform one agent with the same tools has not shown that its elaboration does anything.
+Running the identical architecture on two model families also separates "this engine is good" from
+"this model is good" — which turned out to matter more than expected.</p>
+<div class="seam"><strong>Seam:</strong> none — calls our corpus API natively.</div>
+<div class="refs"><b>Sources</b><ul>
+<li>OpenAI Codex CLI (<code>codex</code>) — vendor documentation.</li>
+<li>Implementation: <code>engines/codex_solo/</code> (manifest and adapter).</li></ul></div></div></details>
+<details class="eng"><summary>
+<span class="nm">Claude subagents</span><span class="arch">Single agent + tools</span>
+<span><span class="pill">Vendor CLI</span></span><span data-status="baseline-claude"></span><span class="more">Learn more</span></summary>
+<div class="body"><p>Same architecture as the Codex engine, other model family — that is the entire point of
+running both. Any difference in their output is a model-family difference, not a scaffolding one.</p>
+<p>One honest limitation: it runs through agents dispatched inside a Claude Code session, because a
+nested <code>claude -p</code> cannot authenticate from inside one. The hypotheses are genuine
+inference; the engine is not reproducible by someone cloning the repo without that session. An
+Anthropic API key turns it into an ordinary scripted engine.</p>
+<div class="seam"><strong>Seam:</strong> none — calls our corpus API natively.</div>
+<div class="refs"><b>Sources</b><ul>
+<li>Anthropic Claude Code CLI — vendor documentation.</li>
+<li>Implementation: <code>engines/claude_agent/</code>; status detail in <code>connectors/STATUS.md</code>.</li></ul></div></div></details>
+<details class="eng"><summary>
+<span class="nm">Codex over MCP</span><span class="arch">Single agent + MCP tools</span>
+<span><span class="pill">Vendor CLI</span></span><span data-status="codex-mcp"></span><span class="more">Learn more</span></summary>
+<div class="body"><p>The Codex engine with one change: it reads the corpus through the hub&rsquo;s MCP server
+instead of a shell command. The pair isolates the retrieval route, and this adapter is the template
+for plugging in any agent that speaks the Model Context Protocol.</p>
+<div class="seam"><strong>Seam:</strong> none: <code>mcp_server.py</code> serves the four corpus calls as tools.</div>
+<div class="refs"><b>Sources</b><ul>
+<li>Implementation: <code>engines/codex_mcp/</code>.</li></ul></div></div></details>
+<details class="eng"><summary>
+<span class="nm">Reference adapter</span><span class="arch">No model</span>
+<span><span class="pill">Hub</span></span><span data-status="reference"></span><span class="more">Learn more</span></summary>
+<div class="body"><p>Proposes that the best-matching findings for a question replicate. It exists so the
+contract can be exercised end to end with no model and no key, and as a floor: any engine worth running
+should beat it on every judged axis.</p>
+<div class="refs"><b>Sources</b><ul>
+<li>Implementation: <code>engines/reference/</code>.</li></ul></div></div></details>
+<details class="eng"><summary>
+<span class="nm">LLNL Open AI Co-Scientist</span><span class="arch">Elo debate tournament</span>
+<span><span class="pill ok">MIT</span></span><span data-status="co-scientist"></span><span class="more">Learn more</span></summary>
+<div class="body"><p>An open reimplementation of Google's AI co-scientist. Six agents under a supervisor:
+Generation proposes, Reflection reviews, Ranking runs a pairwise tournament where two hypotheses are
+argued against each other and the winner takes Elo points, Evolution breeds new hypotheses from
+survivors, Proximity maps similarity, Meta-Review summarises. Hypotheses carry an Elo score (from
+1200) and a parent lineage, so you can trace which ancestors a surviving idea came from.</p>
+<p>The interesting claim is that argument filters better than scoring: rather than asking a model to
+rate a hypothesis, make two compete and keep the winner.</p>
+<div class="seam"><strong>Seam:</strong> <code>ArxivSearchTool.search_papers</code> → our corpus.
+As shipped its arXiv results never reach the agents, so the connector must also wire retrieval into
+the agent prompts — swapping the search alone would change nothing.</div>
+<div class="refs"><b>Sources</b><ul>
+<li>LLNL, <em>Open AI Co-Scientist — Hypothesis Evolution System</em>, repository README (open-source implementation of Google's AI Co-Scientist).</li>
+<li>Architecture read from <code>app/agents.py</code> and <code>app/tools/arxiv_search.py</code> in the cloned source.</li></ul></div></div></details>
+<details class="eng"><summary>
+<span class="nm">HypoGeniC</span><span class="arch">Scored on labelled data</span>
+<span><span class="pill ok">MIT</span></span><span data-status="hypogenic"></span><span class="more">Learn more</span></summary>
+<div class="body"><p>The only engine whose hypotheses are checked against outcomes rather than opinions. It keeps a
+bank of natural-language hypotheses and updates it like a bandit problem: each is applied to
+labelled training examples, earns a reward for how well it predicts them, and the bank keeps what
+performs. A companion mode (HypoRefine) folds literature into the same loop.</p>
+<p>The constraint is the point: it needs a supervised dataset. Powerful where labels exist,
+inapplicable where they do not — which is most open questions in a field like this one.</p>
+<div class="seam"><strong>Seam:</strong> <code>LiteratureAgent(paper_infos=[{title, summary}])</code>
+→ our corpus records, bypassing GROBID and the PDF pipeline entirely.</div>
+<div class="refs"><b>Sources</b><ul>
+<li>Zhou et al., <em>Hypothesis Generation with Large Language Models</em> — <code>arxiv.org/abs/2404.04326</code></li>
+<li>HypoRefine, literature-integrated generation — <code>arxiv.org/abs/2410.17309</code></li>
+<li>HypoBench — <code>arxiv.org/abs/2504.11524</code></li></ul></div></div></details>
+<details class="eng"><summary>
+<span class="nm">FutureHouse Robin</span><span class="arch">Assays, Bradley–Terry</span>
+<span><span class="pill ok">Apache-2.0</span></span><span data-status="robin"></span><span class="more">Learn more</span></summary>
+<div class="body"><p>Built for experimental biology, and it shows in the output shape: rather than proposing a
+claim it proposes an <em>assay</em> — the measurement you would actually run — then ranks candidates
+by pairwise comparison aggregated with a Bradley–Terry model. The published demonstration ran the
+loop end to end in drug discovery, including analysis of real experimental data.</p>
+<p>That framing is the closest of any engine to the experiment cards this harness produces, which is
+why it is prioritised despite needing a fork.</p>
+<div class="seam"><strong>Seam:</strong> <code>call_platform()</code> in <code>robin/utils.py</code>
+— one function, called four times, reaching the proprietary Edison platform. Replaced with a
+corpus-backed implementation returning the same dict shape, which removes the paid dependency for
+the hypothesis stage.</div>
+<div class="refs"><b>Sources</b><ul>
+<li>FutureHouse, <em>Robin: A multi-agent system for automating scientific discovery</em> — <code>arxiv.org/abs/2505.13400</code></li>
+<li>Seam identified in the cloned source at <code>robin/robin/utils.py</code>.</li></ul></div></div></details>
+<details class="eng"><summary>
+<span class="nm">SciAgents</span><span class="arch">Knowledge-graph paths</span>
+<span><span class="pill ok">Apache-2.0</span></span><span data-status="sciagents"></span><span class="more">Learn more</span></summary>
+<div class="body"><p>The one engine whose native input is a graph rather than a search box. It builds an
+ontological knowledge graph, samples a path between two concepts, and has a team — Ontologist, two
+Scientists, a Critic — expand that path into a structured proposal with hypothesis, mechanism,
+design principles and a novelty argument. The premise is that novelty lives in connections a
+literature has not yet made, and sampling paths surfaces them.</p>
+<p>Conceptually the best fit here, since a citation-coupling graph is exactly what we already have.
+Practically the most work: it wants a <code>.graphml</code> and a node-embedding pickle, not a
+search tool, and the upstream code has not changed materially in some time.</p>
+<div class="seam"><strong>Seam:</strong> none written — requires exporting our concept graph as
+<code>.graphml</code> plus matching node embeddings.</div>
+<div class="refs"><b>Sources</b><ul>
+<li>Ghafarollahi &amp; Buehler, <em>SciAgents: Automating scientific discovery through multi-agent intelligent graph reasoning</em>.</li>
+<li>Graph construction: Buehler et al., 2024 — <code>10.1088/2632-2153/ad7228</code></li></ul></div></div></details>
+<details class="eng"><summary>
+<span class="nm">Sakana AI Scientist v2</span><span class="arch">Reflection loops, end to end</span>
+<span><span class="pill no">not open source</span></span><span data-status="ai-scientist-v2"></span><span class="more">Learn more</span></summary>
+<div class="body"><p>The most ambitious of the set: it takes a topic and runs the whole cycle — ideation,
+experiments, analysis, written manuscript. Only its ideation stage is used here. That stage
+generates candidate ideas then iteratively reflects on them, rewriting each across several passes
+before finalising. v2 drops v1's reliance on human-authored templates and uses an agentic tree
+search over the experiment space.</p>
+<p>Its ideation stage is unusually easy to isolate — one self-contained file with its own entry
+point — which is why it is Tier 1 despite the licence problem.</p>
+<div class="seam"><strong>Seam:</strong> <code>SemanticScholarSearchTool</code> → a
+<code>BaseTool</code> subclass over our corpus, swapped into the module-level tool list. Verified by
+<code>isinstance</code> against their abstract base class.</div>
+<div class="note bad" style="margin:.8rem 0 0"><strong>Licence gate.</strong> This is the one engine
+here that is <strong>not open source</strong>. It ships under "The AI Scientist Source Code License",
+derived from the Responsible AI licence family. Internal benchmarking is permitted, but any
+generated manuscript or technical report must <strong>prominently disclose machine generation</strong>,
+and the restrictions <strong>propagate into downstream agreements</strong>. Its output must be
+labelled and legally reviewed before publication — treat anything it produces as encumbered until
+that review happens. Every other engine here is MIT or Apache-2.0.</div>
+<div class="refs"><b>Sources</b><ul>
+<li>Sakana AI, <em>The AI Scientist-v2</em> — repository README and paper (<code>pub.sakana.ai/ai-scientist-v2/paper</code>).</li>
+<li>Tool contract from <code>ai_scientist/tools/base_tool.py</code>; licence text from <code>LICENSE</code> in the cloned source.</li></ul></div></div></details>
+<details class="eng"><summary>
+<span class="nm">OpenScientist (LBNL)</span><span class="arch">Generate-and-test platform</span>
+<span><span class="pill ok">Apache-2.0</span></span><span data-status="openscientist"></span><span class="more">Learn more</span></summary>
+<div class="body"><p>A platform rather than a library: give it data files and a research question and it runs an
+iterative generate-and-test loop, recording hypotheses, findings and consulted literature in a
+relational store. It is the only system here with genuine relational provenance — findings link to
+the hypotheses they bear on and to the papers behind them — which is the property this harness
+values most and which most engines lack.</p>
+<p>The cost is that it is the least separable: no standalone hypothesis-generation entry point, so
+integration means running the platform and ingesting our corpus into its own literature store.</p>
+<div class="seam"><strong>Seam:</strong> none written — the airgapped route ingests our works into
+its local literature mirror rather than querying PubMed.</div>
+<div class="refs"><b>Sources</b><ul>
+<li>Reese et al. (Lawrence Berkeley National Laboratory), OpenScientist — <code>openscientist.io</code>.</li>
+<li>Preprint: medRxiv <code>10.64898/2026.03.15.26348338</code>.</li></ul></div></div></details>
+</div>
+
+<p class="label">Method</p>
+<h2>Verification</h2>
+<table><thead><tr><th>Source</th><th>What is taken from it</th><th>Licence</th></tr></thead><tbody>
+<tr><td><strong>theoria</strong></td><td>The certify-or-decline discipline: stepwise proof, independent judges per step, certify only if every load-bearing step survives, and an audit database with the queries that regenerate every number. Wired in and running — see the Verification page.</td><td><span class="pill ok">Apache-2.0</span></td></tr>
+</tbody></table>
+
+</section>
+
+<!-- ================= RUN ================= -->
+<section id="p-run" class="hide">
+<h1>Configure a run</h1>
+<p class="lede">Pick the corpus, the engines that generate and the families that verify. The harness
+emits the commands. Engines needing an API key are shown but not selectable until one exists.</p>
+<div class="two">
+<div>
+<div class="sel"><h3 style="margin-top:0">Corpus</h3><div id="corpus-opts"></div></div>
+<div class="sel" style="margin-top:1rem"><h3 style="margin-top:0">Depth and cost</h3>
+<p class="run-sub">How hard each engine works. Depth scales hypotheses per seed, reasoning
+effort, verification, and therefore cost.</p>
+<div id="depth-opts"></div></div>
+<div class="sel" style="margin-top:1rem"><h3 style="margin-top:0">Engines — generation</h3>
+<p class="run-sub">Estimated cost is for the seeds selected below, at the chosen depth.</p>
+<div id="engine-opts"></div></div>
+<div class="sel" style="margin-top:1rem"><h3 style="margin-top:0">Verification — judge families</h3>
+<div id="judge-opts"></div>
+<div class="note" style="margin-bottom:0">A candidate is certified only if <em>every</em> selected
+family certifies it.</div></div>
+<div class="sel" style="margin-top:1rem"><h3 style="margin-top:0">Seeds</h3>
+<div id="seed-opts"></div></div>
+</div>
+<div>
+<div class="sel"><h3 style="margin-top:0">API keys</h3>
+<p style="font-size:var(--text-sm);color:var(--color-gray);margin-top:0">Stored in
+<code>hub/.env</code> on this machine — file mode 0600, gitignored, shown back only as the
+last four characters. A key unlocks its engines for future runs; the runners for the keyed
+engines are still being wired, so saving a key changes their status but does not yet make the
+button run them.</p>
+<div id="keys-panel"></div></div>
+
+<div class="sel" style="margin-top:1rem"><h3 style="margin-top:0">Trigger</h3>
+<p style="font-size:var(--text-sm);color:var(--color-gray);margin-top:0">What the button can
+genuinely run unattended today. Anything else stays in the command list below. theoria is
+scoped, never swept: it runs only the claims ticked in its list, and both this button and the
+adapter itself refuse to start on an empty or implicit selection.</p>
+<div id="job-opts"></div>
+<div style="margin-top:16px;display:flex;gap:12px;align-items:center">
+<button id="run-btn">Run selected</button>
+<button id="stop-btn" class="ghost">Stop</button>
+<span id="run-state" class="dim"></span></div>
+<pre id="run-log" style="display:none;max-height:340px;overflow:auto;margin-top:16px"></pre></div>
+
+<div class="sel" style="margin-top:1rem"><h3 style="margin-top:0">Estimated cost</h3>
+<div id="cost-out"></div>
+<details style="margin-top:16px"><summary class="more">Provider prices (edit to match your plan)</summary>
+<div id="price-panel" style="margin-top:12px"></div></details></div>
+
+<div class="sel" style="margin-top:1rem"><h3 style="margin-top:0">Commands</h3>
+<pre><code id="cmd">…</code></pre><div id="run-warn"></div></div>
+<div class="sel" style="margin-top:1rem"><h3 style="margin-top:0">This run would cover</h3>
+<div id="run-summary"></div></div>
+</div>
+</div>
+</section>
+
+<!-- ================= RESULTS ================= -->
+<section id="p-results" class="hide">
+<h1>Hypotheses: <span data-pack="title"></span></h1>
+<p class="lede"><span data-pack="questions"></span> questions the field states about itself, every
+engine that has run on them, and every verdict against what they produced.</p>
+<div class="grid" id="res-cards"></div>
+<div id="fig-funnel"></div>
+
+<p class="label">The ledger</p>
+<h2>Every hypothesis, and every verdict against it</h2>
+<p>One row per hypothesis. The judge columns are our own audit — does each reasoning step hold
+against the corpus it cites. The <strong>theoria</strong> column is independent of all of it:
+theoria never sees the citations or which engine wrote the hypothesis, only the arithmetic, which
+it re-derives from scratch. A hypothesis can pass our audit and still fail theoria's — where the
+two disagree is the reason for running both, and the ledger flags every such case as it lands.</p>
+<div id="ledger-controls"></div>
+<div id="ledger"></div>
+<p class="note" id="ledger-note"></p>
+
+<p class="label">Output</p>
+<h2>Generation</h2>
+<div id="gen-table"></div>
+<div class="note bad" id="bias-warn"></div>
+<p class="label">Signal</p>
+<h2>Cross-engine convergence</h2>
+<p>Where two independent model families reached the same claim in different vocabulary. Independent
+arrival is weak evidence that a hypothesis is findable in the literature rather than invented.</p>
+<div id="conv-list"></div>
+<p class="label">Signal</p>
+<h2>Conflicts — discriminating experiments</h2>
+<p>Pairs asserting incompatible things about the same measurand. One being right makes the other
+wrong, so each pair defines an experiment that would settle it.</p>
+<div id="conf-list"></div>
+<p class="label">Output</p>
+<h2>Certified hypotheses</h2>
+<p>Survived step-by-step audit under unanimity across all judge families, and judged not to be
+restatements of the existing registry.</p>
+<div id="cert-list"></div>
+<p class="label">Output</p>
+<h2>Declined</h2>
+<p>Published with reasons — the declines are the point of the exercise.</p>
+<div id="dec-list"></div>
+</section>
+
+<!-- ================= VERIFICATION ================= -->
+<section id="p-verification" class="hide">
+<h1>Verification</h1>
+<p class="lede">Every run ends here, and never with the model that generated. The discipline is
+adapted from <strong>theoria</strong>; the verifiers are then themselves measured, which is possible
+wherever a pack holds labelled ground truth, which no generator project has.</p>
+
+<p class="label">Discipline</p>
+<h2>1. The certification discipline</h2>
+<p>theoria is a verified-reasoning harness, not a benchmark suite. A claim must be emitted as a
+stepwise proof; independent judges audit every step; the answer is <strong>certified or
+declined</strong>, never quietly accepted. We adopt that discipline with one addition its author
+did not need: a citation step must resolve to a work that exists in <em>this</em> corpus
+<em>and</em> actually assert what the step claims.</p>
+<table><thead><tr><th>Stage</th><th>What it checks</th><th>Cost</th></tr></thead><tbody>
+<tr><td>Mechanical</td><td>Citations exist; scope complete; experiment specific enough to cost; registry restatement flagged.</td><td>Free — declines a class before any judge is paid</td></tr>
+<tr><td>Judged</td><td>Every rationale step, with the cited abstracts inlined. Does the cited work actually say this? Would the experiment discriminate the claim from its null?</td><td>One pass per judge family</td></tr>
+<tr><td>Verdict</td><td>certified · pedantic (sound, non-load-bearing flaw) · declined (failing step named)</td><td>Unanimity required</td></tr>
+</tbody></table>
+
+<p class="label">Independent verifier</p>
+<h2>2. theoria, actually run</h2>
+<p>Sections 1 and 3 to 7 describe our own judges. This section is different: it is
+<a href="https://github.com/zaladbar/theoria">theoria</a> itself, cloned and executed — its solver,
+interpreter, formalizer, per-step judges, pedantry filter and convention lift — not our imitation of
+its discipline.</p>
+<p>It is given something deliberately narrow. We extract the steps an engine itself marked as
+<em>computation</em>, plus the estimand, and pose them as one self-contained proposition. theoria
+never sees the citations, the seed question, or which engine wrote it. It re-derives every number
+from scratch and rejects any step resting on an unstated premise, then answers CORRECT or INCORRECT
+with the specific error.</p>
+<p>That makes it independent of our judges in the way that matters. Our judges ask a question about
+<em>this corpus</em> — does the cited paper support the step citing it. theoria asks whether the
+reasoning is <em>valid</em> at all. A hypothesis can be scrupulously cited and still arithmetically
+wrong, which is exactly the failure class the run turned up on the physics side.</p>
+<div class="grid" id="th-cards"></div>
+
+<h3>What theoria can answer, and what each outcome means</h3>
+<p>theoria separates two questions that are usually conflated: <em>did I produce a sound proof</em>
+(its own audit of itself) and <em>what does that proof conclude</em> (the answer). Both are in
+every run record, and both are needed to read a verdict correctly.</p>
+<table><thead><tr><th>Field</th><th>Values</th><th>What it means</th></tr></thead><tbody>
+<tr><td><code>answer</code></td><td>free text — for our claims, CORRECT&nbsp;/ INCORRECT + the specific error</td><td>The conclusion of the proof: what theoria established about the claim it was posed. Extracted from the final proof state.</td></tr>
+<tr><td><code>verified</code></td><td>JUDGE-PASSED&nbsp;/ REJECTED</td><td>Whether theoria's <em>own proof</em> survived its per-step audit: one judge per step, the judge's kind chosen by the step's justification type. REJECTED means theoria could not establish anything either way — not that the claim is false.</td></tr>
+<tr><td><code>verified_unconditionally</code></td><td>true&nbsp;/ false</td><td>True only if the proof passed with <em>zero</em> added assumptions. False-but-verified means the convention-lift judge had to grant something (next row).</td></tr>
+<tr><td><code>verified_under_assumptions</code></td><td>list of named conventions</td><td>Rejected steps that were legitimate but rescued by naming an explicit, sourced convention (e.g. a standard sign convention). Each is recorded with its step and source, so the assumption is auditable rather than silent.</td></tr>
+<tr><td>per-step <code>verdicts</code></td><td>accepted&nbsp;/ rejected + reason, per step</td><td>The audit itself. A <code>citation</code> step's judge checks the invoked result exists and is applied correctly; a <code>computation</code> step's judge re-derives the number; a <code>problem_given</code> judge checks the premise really is stated in the problem.</td></tr>
+<tr><td><code>pedantry</code></td><td>is_pedantic + reason</td><td>A screen over failed verdicts: a rejection that is a technicality (formatting, an unstated-but-universal convention) is overturned here rather than sinking the proof. Substantive rejections pass through.</td></tr>
+<tr><td><code>correct</code></td><td>true&nbsp;/ false</td><td>A naive substring match against an expected answer — upstream documents it as for scanning only. Meaningless for our custom claims (there is no expected string) and never used here.</td></tr>
+</tbody></table>
+
+<h3>How those become the ledger's theoria column</h3>
+<table><thead><tr><th>Ledger verdict</th><th>Condition</th><th>Reading</th></tr></thead><tbody>
+<tr><td><span class="pill ok">certified</span></td><td>proof verified <em>and</em> answer CORRECT</td><td>theoria produced an audited proof that the hypothesis's arithmetic holds.</td></tr>
+<tr><td><span class="pill bad">declined</span></td><td>proof verified <em>and</em> answer INCORRECT</td><td>An audited proof that the arithmetic is wrong, with the specific error. A soundly-proved INCORRECT is a decline — conflating <code>verified</code> with approval would invert exactly these cases.</td></tr>
+<tr><td><span class="pill warn">inconclusive</span></td><td>proof not verified, or no readable answer</td><td>theoria could not establish the claim either way. Not evidence against the hypothesis.</td></tr>
+<tr><td><span class="pill warn">error</span></td><td>timeout or crash</td><td>The run did not complete. Re-queued, not counted.</td></tr>
+<tr><td><span class="pill">queued</span></td><td>claim extracted, run pending</td><td>Waiting its turn — each claim takes tens of minutes.</td></tr>
+<tr><td><span class="pill">no arithmetic</span></td><td>no computation step in the hypothesis</td><td>A purely empirical proposal: nothing for theoria to re-derive. Blank would read as an unrun check, so it is stated.</td></tr>
+</tbody></table>
+
+<h3>Fidelity to the upstream setup — stated, not assumed</h3>
+<table><thead><tr><th>Audited theoria setup</th><th>This machine</th><th>Consequence</th></tr></thead><tbody>
+<tr><td>Codex on every role, Claude formalizer</td><td>Codex (<code>gpt-5.5</code>) on <em>every</em> role incl. formalizer — a nested Claude CLI cannot authenticate inside the session that drives this harness</td><td>Single-family verification. Recorded because self-preference is this project's own headline measurement.</td></tr>
+<tr><td>Each problem in a Docker sandbox; agents told about the container</td><td><code>--no-docker</code> (Docker not installed); agents use the Codex CLI's native read-only sandbox on the host</td><td>Isolation is weaker (read-only sandbox rather than a container). Tool execution works — verified by probe.</td></tr>
+<tr><td>Environment preamble matches the sandbox</td><td><strong>Pass 1 did not</strong>: upstream's Debian-container description was handed to agents on a bare host. Measured effect: 52 calls, zero tool invocations — arithmetic "re-derived" by unexecuted reasoning. Pass 1 is archived, not reported. Pass 2 runs with a preamble describing the real environment and instructing executed <code>python3</code> checks.</td><td>The pass-1 verdicts may still be right, but they were not produced the way the harness claims, so they do not count.</td></tr>
+</tbody></table>
+<p><strong>Consumption, measured.</strong> Per claim: 31–92 LLM calls, mean 6.3M input tokens
+(4.2M of it prompt-cache reads) and 165k output, 22–35 minutes wall-clock. All 50 eligible
+claims project to roughly 315M input / 8M output tokens. Billed through the Codex CLI
+subscription — the run records' cost fields read zero throughout. Because a full sweep is
+about a day of continuous compute, runs are now launched per named claim: the adapter
+refuses <code>--run</code> without <code>--only C001,…</code> or an explicit
+<code>--all</code>, and the Run page's trigger submits only ticked claims.</p>
+
+<div id="th-panel"></div>
+<div class="note"><strong>Reading its verdict correctly.</strong> theoria reports whether it
+verified its own proof, separately from what that proof concluded. A soundly verified proof of
+INCORRECT is a <em>decline of the hypothesis</em>, not a pass. Conflating the two inverts the
+result — it did so here, and four hypotheses were briefly reported as certified whose answer was
+INCORRECT. The verdicts on this page were re-derived from the saved run JSONs after the fix.</div>
+
+<p class="label">Benchmark</p>
+<h2>3. Verifier benchmark, scored against known labels</h2>
+<div id="fig-bench"></div>
+<p>Where a pack holds a verified claim register, the verifiers themselves can be scored: blinded items,
+each a scoped claim plus one verbatim sentence whose stance was already adversarially verified, with
+refutations over-represented so that a verifier that simply agrees with the field scores badly.
+Sentences quoted publicly are excluded, so nobody can answer from memory.</p>
+<div id="taskA"></div>
+
+<p class="label">Headline</p>
+<h2>4. Do judges prefer their own model family?</h2>
+<div id="fig-selfpref"></div>
+<div id="selfpref"></div>
+<div class="note"><strong>Why the harness measures this.</strong> If one engine simply wrote better
+hypotheses, every judge would rank it higher. If instead each judge ranks its own family higher, a
+certification rate measures who judged as much as what was written. Almost every engine in the
+landscape verifies with the model that generated (reflection loops, simulated debate, self-scoring,
+data-driven reward), so cross-family verification is wired into the harness as the minimum valid
+design rather than offered as an option.</div>
+
+<div id="pack-findings"></div>
+</section>
+
+</main>
+<footer>Open Science Foundation · Open Science Institute, Matten bei Interlaken<br>
+Conjecture run panel · pack <code data-pack="name"></code> · every figure is generated from the
+pack&rsquo;s <code>state/</code>.</footer>
+<script src="app.js?v=1787786870"></script>
+</body></html>

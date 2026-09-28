@@ -9,3 +9,5 @@ conformance/toy_pack/candidates.json
 __pycache__/
 .env
 .DS_Store
+# licensed house fonts: drop them in locally, never commit
+panel/fonts/
