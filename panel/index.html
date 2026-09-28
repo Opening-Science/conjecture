@@ -121,7 +121,7 @@ nothing is uploaded anywhere.</p>
 <input type="text" id="cname" value="my-field" style="width:9rem"></label>
 <label class="opt"><span style="flex:1"><span class="t">Expansion hops</span>
 <span class="d">2 reproduces the biophoton pack (18,355 works from 245 seeds)</span></span>
-<select id="hops"><option>1</option><option selected>2</option><option>3</option></select></label>
+<select id="hops"><option>1</option><option selected>2</option></select></label>
 <label class="opt"><span style="flex:1"><span class="t">Mine full texts</span>
 <span class="d">open-access PDFs → sentences, open-problem statements</span></span>
 <input type="checkbox" id="ft" checked></label>
@@ -147,17 +147,19 @@ commands. Files are read for name and size only; nothing is uploaded.</p>
 <p class="label">Method</p>
 <h2>2. The method, stage by stage</h2>
 <p>Each stage is idempotent and cached, so a rerun is free and a failure resumes rather than
-restarts. Stage letters are the ones used in the reference implementation.</p>
+restarts. The hub's corpus builder (<code>builder/run.py</code>) runs A, B, C, E, the index, I, J
+and K; clustering (D) and the claim registry (M) are a pack's own tools, since engines never read
+the first and the second is curation.</p>
 <table><thead><tr><th>Stage</th><th>What it does</th><th>Output</th></tr></thead><tbody>
 <tr><td><strong>A</strong> resolve</td><td>Match every seed reference to a canonical work id. Unresolvable entries are reported, not silently dropped.</td><td>seed work ids</td></tr>
 <tr><td><strong>B</strong> expand</td><td>Backward and forward citation expansion to the chosen hop depth, with pruning. This is what turns a reading list into a field.</td><td>the publication universe</td></tr>
 <tr><td><strong>C</strong> normalise</td><td>Works, authors, institutions, topics and citation edges into one relational store.</td><td><code>fieldmap.sqlite</code></td></tr>
-<tr><td><strong>D</strong> network</td><td>Co-authorship, bibliographic-coupling and co-citation graphs, then <strong>Leiden community detection</strong> — chosen over Louvain because Leiden guarantees well-connected communities, which Louvain does not (Traag, Waltman &amp; van Eck 2019, <em>Sci. Rep.</em> 9:5233, <code>10.1038/s41598-019-41695-z</code>). Cluster membership is a function of shared references and nothing else — no keyword filter, no model, no editorial hand.</td><td>communities, sub-strands</td></tr>
+<tr><td><strong>D</strong> network <span class="pill">pack tooling</span></td><td>Co-authorship, bibliographic-coupling and co-citation graphs, then <strong>Leiden community detection</strong> — chosen over Louvain because Leiden guarantees well-connected communities, which Louvain does not (Traag, Waltman &amp; van Eck 2019, <em>Sci. Rep.</em> 9:5233, <code>10.1038/s41598-019-41695-z</code>). Cluster membership is a function of shared references and nothing else — no keyword filter, no model, no editorial hand.</td><td>communities, sub-strands</td></tr>
 <tr><td><strong>E</strong> openness <span class="pill">optional</span></td><td>Per-work and per-author open-access and open-data scoring. An <strong>analysis overlay, not a prerequisite</strong> — no engine reads it and the corpus API does not expose it. Run it if you want to characterise how open the field is; skip it and everything downstream still works.</td><td>openness overlay</td></tr>
 <tr><td><strong>I</strong> harvest</td><td>Fetch every open-access PDF the universe contains. Resumable.</td><td>local full texts</td></tr>
 <tr><td><strong>J</strong> mine</td><td>Extract text and mine the sentences where the field states what it does <em>not</em> know — the raw material for run seeds.</td><td>statement corpus</td></tr>
 <tr><td><strong>K</strong> knowledgebase</td><td>One joined, FTS5-searchable store over titles, abstracts and full text. This is what the corpus API serves to engines.</td><td><code>knowledgebase.sqlite</code></td></tr>
-<tr><td><strong>M</strong> registry</td><td>The field's canonical claims as scoped hypotheses with explicit nulls, linked to every sentence that supports, refutes or discusses them. Optional, but it is what makes ground-truth scoring possible.</td><td>claim registry + evidence</td></tr>
+<tr><td><strong>M</strong> registry <span class="pill">pack curation</span></td><td>The field's canonical claims as scoped hypotheses with explicit nulls, linked to every sentence that supports, refutes or discusses them. Optional, but it is what makes ground-truth scoring possible.</td><td>claim registry + evidence</td></tr>
 </tbody></table>
 
 <div class="note"><strong>The registry is the expensive part, and the valuable one.</strong> In

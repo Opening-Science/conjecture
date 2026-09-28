@@ -76,6 +76,7 @@ claims be measured honestly rather than leaked.
 | `judge/<name>/` | One judge each: `judge.yaml` and `adapter.py`. |
 | `run_engine.py`, `run_judge.py` | Run any engine over the questions, any judge over the chunks. |
 | `mcp_client.py` | Minimal MCP client, used by adapters that reach the corpus over MCP. |
+| `builder/` | The corpus builder: seed bibliography to field map to the knowledgebase a pack serves (`builder/run.py`). |
 | `panel/` | The run panel: a local web app over the active pack (`server.py`), and a read-only static export of it (`export.py`). |
 | `conformance/` | Toy pack and conformance runner; results feed `connectors/STATUS.md`. |
 | `merge/merge.py` | Cross-engine clustering, provenance kept. |
@@ -193,6 +194,37 @@ python connectors/fetch_vendor.py                    # upstream engines, pinned
 
 Python 3.11+. Engines bring their own requirements: the Codex adapters
 need the Codex CLI, the Claude adapters a Claude Code session.
+
+## Building a pack's corpus
+
+```bash
+pip install -r requirements-builder.txt
+export OPENALEX_API_KEY=... OPENALEX_MAILTO=you@example.org
+python builder/run.py --list
+python builder/run.py                  # every stage; each is cached or resumable
+```
+
+From a seed bibliography (a CSV of `bib_key,year,first_author,title,doi`),
+the builder resolves the seeds in OpenAlex, expands them by citation into
+the field's universe (two hops, pruned by how many seeds a work links
+to), builds the field map, fetches abstracts, ranks and indexes every
+paper, harvests the open-access PDFs politely, extracts their text and
+mines the sentences where the field states what it does not know, and
+joins it all into the knowledgebase the corpus API serves. It writes to
+the pack's own `corpus.knowledgebase` and `corpus.fieldmap`; working
+directories and the field's vocabulary come from the pack's `build:`
+block (see `builder/config.py`). A rebuild keeps a pack's curated tables,
+such as its claim register.
+
+The builder is the one that built the biophoton pack: rerun from that
+pack's cache, stages C to K reproduce its field map, paper index and
+knowledgebase table for table. Credentials come from the environment
+only, and the API key is redacted from any error. Clustering, contact
+data and a pack's claim curation are deliberately not part of it.
+
+Two of its dependencies are copyleft (Unidecode GPL-2.0+, PyMuPDF
+AGPL-3.0), which is why they live in `requirements-builder.txt` and not
+in the hub's own requirements.
 
 ## The run panel
 

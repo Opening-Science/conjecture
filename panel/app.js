@@ -1164,44 +1164,30 @@ function renderCorpusIntake() {
       }
     }
 
+    const stages = ['A', 'B', 'C', 'E', 'index'];
+    if (ft) stages.push('I', 'J');
+    stages.push('K');
     const L = [`# corpus: ${name}${parsed.length ? `  (${parsed.length} seeds)` : ''}`,
-      `mkdir -p corpora/${name} && mv ~/Downloads/${name}_seeds.csv corpora/${name}/seeds.csv`,
-      '', 'cd biophoton-fieldmap/src',
-      `export CORPUS=${name}`, '',
-      '# A  resolve seeds to canonical work ids',
-      '../.venv/bin/python seed_resolve.py',
-      '# B  citation expansion  → the publication universe',
-      `../.venv/bin/python expand.py --hops ${hops}`,
-      '# C  normalise into the relational store',
-      '../.venv/bin/python build_db.py',
-      '# D  coupling graphs + Leiden communities',
-      '../.venv/bin/python networks.py',
-      ];
-    if ($('#openness') && $('#openness').checked) L.push(
-      '# E  openness overlay (optional — analysis only, no engine reads it)',
-      '../.venv/bin/python openness.py');
-    if (ft) L.push('',
-      '# I  harvest open-access PDFs (resumable)',
-      '../.venv/bin/python harvest_oa_pdfs.py',
-      '# J  full text + open-problem statement mining',
-      '../.venv/bin/python extract_fulltext.py');
+      `mkdir -p ${name} && mv ~/Downloads/${name}_seeds.csv ${name}/seeds.csv`,
+      `# in ${name}/pack.yaml:  build: {seeds: seeds.csv, expansion: {hops: ${hops}}}`,
+      '', `cd conjecture && export CONJECTURE_PACK=../${name}/pack.yaml`,
+      'export OPENALEX_API_KEY=...  OPENALEX_MAILTO=you@example.org', '',
+      '# A resolve seeds · B expand by citation · C field map · E abstracts',
+      '# index rank every paper' + (ft ? ' · I harvest OA PDFs · J full text + statements' : ''),
+      '# K the knowledgebase the corpus API serves',
+      `python builder/run.py ${stages.join(' ')}`];
     if (pdfs.length) L.push('',
-      `# I2 closed-access and hand-collected PDFs (${pdfs.length} file(s))`,
-      `mkdir -p ../../literature/curated && cp ~/Downloads/*.pdf ../../literature/curated/`,
-      `mv ~/Downloads/${name}_curated.csv ../../literature/curated/manifest.csv`,
-      '../.venv/bin/python consolidate_literature.py',
-      '# make them retrievable by the engines (marks outside_universe=1',
-      '#     so field-map counts are unchanged)',
-      '../.venv/bin/python ingest_reference_works.py');
-    L.push('# K  one FTS5-searchable knowledgebase — what the corpus API serves',
-      '../.venv/bin/python build_knowledgebase.py');
+      `# closed-access and hand-collected PDFs (${pdfs.length} file(s))`,
+      `mkdir -p ${name}/build/literature/curated && cp ~/Downloads/*.pdf ${name}/build/literature/curated/`,
+      `# list them in pack.yaml build.references (from ${name}_curated.csv), then`,
+      'python builder/run.py refs');
+    if ($('#openness') && !$('#openness').checked) L.push('',
+      '# (stage E also fetches the abstracts the index needs, so it always runs;',
+      '#  the openness scores it computes are simply not used)');
     if (reg) L.push('',
-      '# M  claim registry + evidence linkage (enables ground-truth scoring)',
-      '../.venv/bin/python hypothesis_inventory.py',
-      '../.venv/bin/python hypothesis_registry_v2.py');
-    L.push('', '# then configure the run',
-      '../.venv/bin/python ../../hub/build_seeds.py');
-
+      '# M  a claim registry is the pack\'s own curation: add hypotheses_v2 and',
+      '#    its evidence tables to the knowledgebase; rebuilds carry them over');
+    L.push('', '# then the run', 'python build_seeds.py');
     $('#corpus-cmd').innerHTML =
       `<h3>Commands for this corpus</h3><pre><code>${esc(L.join('\n'))}</code></pre>` +
       (reg ? '' : '<div class="note warn">Without a claim registry you can generate and certify ' +

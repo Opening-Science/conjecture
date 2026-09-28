@@ -19,14 +19,26 @@ HUB = Path(__file__).resolve().parent.parent
 TOY = HUB / "conformance" / "toy_pack"
 
 
-def ensure_pack() -> Path:
-    if not os.environ.get("CONJECTURE_PACK"):
+_TOY: Path | None = None
+
+
+def toy_pack() -> Path:
+    """A built toy pack, whatever CONJECTURE_PACK says (for tests that are
+    about the toy pack's shape rather than about the pack under test)."""
+    global _TOY
+    if _TOY is None:
         out = Path(tempfile.mkdtemp(prefix="conjecture-toy-"))
         for f in ("pack.yaml", "questions.md"):
             shutil.copy2(TOY / f, out / f)
         subprocess.run([sys.executable, str(TOY / "build.py"),
                         "--out", str(out)], check=True)
-        os.environ["CONJECTURE_PACK"] = str(out / "pack.yaml")
+        _TOY = out / "pack.yaml"
+    return _TOY
+
+
+def ensure_pack() -> Path:
+    if not os.environ.get("CONJECTURE_PACK"):
+        os.environ["CONJECTURE_PACK"] = str(toy_pack())
     return Path(os.environ["CONJECTURE_PACK"])
 
 
