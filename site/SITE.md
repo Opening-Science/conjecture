@@ -22,15 +22,17 @@ npm run design:check && npm run design:tokens:check && npm test && npm run typec
 npm run generate          # static site in .output/public
 ```
 
-Licensed fonts (Selecta; ABC Diatype Semi Mono) are not included: put
-the woff2 files in `public/fonts/` locally (git ignores them) or let the
-deploy workflow fetch them. Without them the site uses fallback fonts and
-is not typographically faithful.
+The OSF webfonts (Selecta; ABC Diatype Semi Mono), owned by the
+foundation, are never committed. The deploy workflow fetches them from
+opening.science; locally, put the woff2 files in `public/fonts/` (git
+ignores them). Without them the site uses fallback fonts and is not
+typographically faithful.
 
 ## Deploy
 
 `.github/workflows/site.yml`, run by hand, builds the site with the
-biophoton pack and deploys it to GitHub Pages. Nothing publishes on push.
+biophoton pack and deploys it to GitHub Pages at conjecture.opening.science.
+Nothing publishes on push.
 
 ## Copy
 

@@ -3,11 +3,10 @@
 # and deploy it to GitHub Pages. Manual only: publishing is an explicit
 # decision, so this never runs on push.
 #
-# Licensed fonts are not in git. To render with them, store them as the
-# assets of a release in a private repository and set the repository
-# variable OSF_FONTS_REPO (owner/name) and OSF_FONTS_TAG, plus the secret
-# OSF_FONTS_TOKEN (read access to that repository). Without them the site
-# builds with fallback fonts.
+# The OSF webfonts (Selecta, ABC Diatype Semi Mono) are owned by the Open
+# Science Foundation and never committed: the build fetches them from the
+# foundation's own site (repository variable OSF_FONTS_BASE, default
+# https://opening.science/fonts/) and serves them from this one.
 name: site
 
 on:
@@ -31,7 +30,6 @@ jobs:
         with:
           repository: Opening-Science/conjecture-pack-biophotons
           path: pack
-          token: ${{ secrets.PACK_TOKEN || github.token }}
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -40,17 +38,15 @@ jobs:
         run: python site/scripts/hub-data.py
         env:
           CONJECTURE_PACK: ${{ github.workspace }}/pack/pack.yaml
-      - name: Licensed fonts (optional)
+      - name: OSF webfonts, from the foundation's site
         env:
-          GH_TOKEN: ${{ secrets.OSF_FONTS_TOKEN }}
-          REPO: ${{ vars.OSF_FONTS_REPO }}
-          TAG: ${{ vars.OSF_FONTS_TAG }}
+          BASE: ${{ vars.OSF_FONTS_BASE || 'https://opening.science/fonts/' }}
         run: |
-          if [ -n "$GH_TOKEN" ] && [ -n "$REPO" ]; then
-            gh release download "${TAG:-fonts}" -R "$REPO" -p '*.woff2' -p '*.woff' -D site/public/fonts
-          else
-            echo "No font source configured: building with fallback fonts."
-          fi
+          for f in Selecta-Regular Selecta-Medium Selecta-Bold \
+                   ABCDiatypeSemiMono-Regular ABCDiatypeSemiMono-Bold; do
+            curl -fsSL "${BASE}${f}.woff2" -o "site/public/fonts/${f}.woff2"
+          done
+          ls -la site/public/fonts
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
