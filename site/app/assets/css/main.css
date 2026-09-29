@@ -1,0 +1,438 @@
+@import "tailwindcss";
+
+/*
+ * Theme tokens — extracted 1:1 from mirror/_nuxt/entry.lK5Gk5H1.css
+ * (@layer theme) and reference/theme-tokens.txt.
+ *
+ * CRITICAL: --spacing is 0.0625rem (1px at 16px root), NOT the Tailwind
+ * default 0.25rem. All numeric spacing utilities (p-30, gap-40, mt-100 …)
+ * depend on this.
+ */
+@theme {
+  --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-mono: "ABCDiatypeSemiMono", monospace;
+  --font-body: "Selecta", sans-serif;
+
+  --spacing: 0.0625rem;
+
+  --container-3xl: 48rem;
+
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+
+  --radius-md: 0.375rem;
+  --radius-xl: 0.75rem;
+  --radius-2xl: 1rem;
+
+  --color-white: #fff;
+  --color-black: #1d1d1d;
+  --color-gray: #646363;
+  --color-gray-light: #eee;
+  /* Two blues, two distinct jobs — do not cross them:
+     --color-blue (#73adff) is the production interaction blue: the site's
+       ONE hover colour (nav, Values tabs, PostList titles, article links,
+       interactive tags). Too light for resting body text (~2.4:1 on white).
+     --color-blue-ink (#1c4e8f) is an admitted token for STATIC readable blue
+       text where contrast is required (news h1, Citation/LicenseNotice links,
+       ~8.5:1 on white). It is NOT a hover state. */
+  --color-blue: #73adff;
+  --color-blue-ink: #1c4e8f;
+  --color-cream-light: #f8f8f4;
+  --color-cream: #efeee7;
+  --color-cream-dark: #c0beb2;
+  --color-cream-darker: #6f6e66;
+  --color-yellow: #e3be00;
+  --color-yellow-light: #fefbe9;
+  /* OpenTwin sub-brand accent. Extends the palette for the /OpenTwinLab
+     section only (the folded Opening-Science/OpenTwin microsite): red is
+     that project's interaction/eyebrow accent, standing in for the OSF blue.
+     Admitted as a scoped token 2026-07-26 so /OpenTwinLab keeps its own
+     colour identity while living inside the OSF site. Do not use elsewhere. */
+  --color-red: #a85450;
+  --color-button: #323232;
+  --color-button-hover: #000;
+
+  /* The original compiled CSS defines NO --text-lg token and emits no
+     .text-lg rule, so `text-lg` (used on the legal-page prose wrappers)
+     inherits the body font-size (16px). Unset Tailwind's default so the
+     utility is not generated, replicating that quirk. */
+  --text-lg: initial;
+  --text-lg--line-height: initial;
+
+  --text-sm: 0.875rem;
+  --text-sm--line-height: 1.2;
+  --text-base: 1rem;
+  --text-base--line-height: 1.2;
+  --text-xl: 1.125rem;
+  --text-xl--line-height: 1.2;
+  --text-1xl: 1.3125rem;
+  --text-1xl--line-height: 1.2;
+  --text-2xl: 1.875rem;
+  --text-2xl--line-height: 1.2;
+  --text-3xl: 2.25rem;
+  --text-3xl--line-height: 1.1;
+  --text-4xl: 2.5rem;
+  --text-4xl--line-height: 1.1;
+  --text-5xl: 3.25rem;
+  --text-5xl--line-height: 1;
+
+  --spacing-header: 5rem;
+  --spacing-header-mobile: 5rem;
+  --spacing-container: 87rem;
+}
+
+/* Base — ported verbatim from the compiled CSS @layer base additions. */
+@layer base {
+  [id] {
+    scroll-margin-top: calc(var(--spacing-header-mobile) + 2rem);
+  }
+
+  @media (min-width: 64rem) {
+    [id] {
+      scroll-margin-top: calc(var(--spacing-header) + 2rem);
+    }
+  }
+
+  html {
+    font-family: var(--font-body);
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-size: 13.2px;
+  }
+
+  @media (min-width: 40rem) {
+    html {
+      font-size: 13.6px;
+    }
+  }
+
+  @media (min-width: 48rem) {
+    html {
+      font-size: 14px;
+    }
+  }
+
+  @media (min-width: 64rem) {
+    html {
+      font-size: 15px;
+    }
+  }
+
+  @media (min-width: 80rem) {
+    html {
+      font-size: 16px;
+    }
+  }
+
+  @media (min-width: 96rem) {
+    html {
+      font-size: 17px;
+    }
+  }
+}
+
+/*
+ * Custom container / grid utilities — definitions reverse-engineered from
+ * mirror/_nuxt/entry.lK5Gk5H1.css (@layer utilities). They are only ever
+ * used as bare classes (no variants), so plain rules in the utilities
+ * layer reproduce the compiled output exactly.
+ */
+@layer utilities {
+  .container-institute {
+    width: 100%;
+    margin-inline: auto;
+    max-width: calc(var(--spacing) * 1186);
+    padding-inline: calc(var(--spacing) * 20);
+  }
+
+  @media (min-width: 64rem) {
+    .container-institute {
+      padding-inline: calc(var(--spacing) * 32);
+    }
+  }
+
+  .container-main {
+    width: 100%;
+    margin-inline: auto;
+    max-width: var(--spacing-container);
+    padding-inline: calc(var(--spacing) * 20);
+  }
+
+  @media (min-width: 64rem) {
+    .container-main {
+      padding-inline: calc(var(--spacing) * 32);
+    }
+  }
+
+  .container-narrow {
+    width: 100%;
+    margin-inline: auto;
+    max-width: calc(var(--spacing) * 685);
+    padding-inline: calc(var(--spacing) * 20);
+  }
+
+  @media (min-width: 64rem) {
+    .container-narrow {
+      padding-inline: calc(var(--spacing) * 32);
+    }
+  }
+
+  .container-wide {
+    width: 100%;
+    margin-inline: auto;
+    max-width: var(--spacing-container);
+    padding-inline: calc(var(--spacing) * 10);
+  }
+
+  @media (min-width: 64rem) {
+    .container-wide {
+      padding-inline: calc(var(--spacing) * 16);
+    }
+  }
+
+  /* The original overrides Tailwind's .container with a custom definition. */
+  .container {
+    width: 100%;
+    margin-inline: auto;
+    max-width: var(--spacing-container);
+    padding-inline: calc(var(--spacing) * 32);
+  }
+
+  .page-grid {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: calc(var(--spacing) * 24);
+  }
+}
+
+/* Fonts — copied from the compiled CSS; files live in public/fonts/. */
+@font-face {
+  font-display: swap;
+  font-family: Selecta;
+  font-style: normal;
+  font-weight: 400;
+  src:
+    url(/fonts/Selecta-Regular.woff2) format("woff2"),
+    url(/fonts/Selecta-Regular.woff) format("woff");
+}
+
+@font-face {
+  font-display: swap;
+  font-family: Selecta;
+  font-style: normal;
+  font-weight: 500;
+  src:
+    url(/fonts/Selecta-Medium.woff2) format("woff2"),
+    url(/fonts/Selecta-Medium.woff) format("woff");
+}
+
+@font-face {
+  font-display: swap;
+  font-family: Selecta;
+  font-style: normal;
+  font-weight: 700;
+  src:
+    url(/fonts/Selecta-Bold.woff2) format("woff2"),
+    url(/fonts/Selecta-Bold.woff) format("woff");
+}
+
+@font-face {
+  font-display: swap;
+  font-family: ABCDiatypeSemiMono;
+  font-style: normal;
+  font-weight: 400;
+  src: url(/fonts/ABCDiatypeSemiMono-Regular.woff2) format("woff2");
+}
+
+@font-face {
+  font-display: swap;
+  font-family: ABCDiatypeSemiMono;
+  font-style: normal;
+  font-weight: 700;
+  src: url(/fonts/ABCDiatypeSemiMono-Bold.woff2) format("woff2");
+}
+
+/* Component CSS ported verbatim from the tail of the compiled stylesheet. */
+.imagetext-swiper-pagination {
+  --swiper-pagination-bullet-horizontal-gap: 0;
+}
+
+.imagetext-swiper-pagination .swiper-pagination-bullet {
+  background-clip: content-box;
+  background-color: var(--color-gray-light);
+  border-radius: 0;
+  box-sizing: content-box;
+  height: calc(var(--spacing) * 5);
+  opacity: 1;
+  padding: calc(var(--spacing) * 10);
+  width: calc(var(--spacing) * 5);
+}
+
+.imagetext-swiper-pagination .swiper-pagination-bullet-active {
+  background-color: var(--color-gray);
+}
+
+.prose h2 {
+  font-size: var(--text-xl);
+  line-height: var(--tw-leading, var(--text-xl--line-height));
+  margin-bottom: calc(var(--spacing) * 16);
+}
+
+.prose h2,
+.prose h3 {
+  --tw-font-weight: var(--font-weight-bold);
+  color: var(--color-black);
+  font-weight: var(--font-weight-bold);
+}
+
+.prose h3 {
+  margin-bottom: calc(var(--spacing) * 20);
+  margin-top: calc(var(--spacing) * 24);
+}
+
+.prose h3:first-child {
+  margin-top: calc(var(--spacing) * 0);
+}
+
+.prose ul {
+  list-style-type: disc;
+  margin-block: calc(var(--spacing) * 12);
+  padding-left: calc(var(--spacing) * 20);
+}
+
+.prose ul li + li {
+  margin-top: calc(var(--spacing) * 6);
+}
+
+.prose a {
+  color: var(--color-black);
+  text-decoration-line: underline;
+  text-underline-offset: 2px;
+}
+
+.prose a:hover {
+  color: var(--color-yellow);
+}
+
+.prose-invert a {
+  color: var(--color-white);
+}
+
+.prose-invert a:hover {
+  color: var(--color-yellow-light);
+}
+
+/* ProseArticle extensions (design/components/ProseArticle.md) — long-form
+   post-body elements added to .prose, built only from @theme tokens. */
+.prose p {
+  margin-bottom: calc(var(--spacing) * 24);
+}
+
+/* Quote callout in the article body. The site's second face (ABC Diatype
+   SemiMono, the captions/buttons voice) set on the quiet cream panel: a
+   typewritten insert rather than the generic italic-with-colored-edge
+   callout (owner-directed restyle 2026-07-26). Hairline-free by design;
+   the panel alone carries the callout. */
+.prose blockquote {
+  margin-block: calc(var(--spacing) * 30);
+  background: var(--color-cream);
+  border-radius: var(--radius-md);
+  padding: calc(var(--spacing) * 20) calc(var(--spacing) * 24);
+  color: var(--color-black);
+  font-family: var(--font-mono);
+  font-size: var(--text-base);
+  line-height: var(--text-base--line-height);
+}
+
+/* The last paragraph inside the panel keeps the panel symmetric (its .prose p
+   bottom margin would otherwise pad the panel bottom-heavy). */
+.prose blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+.prose ol {
+  list-style-type: decimal;
+  margin-block: calc(var(--spacing) * 12);
+  padding-left: calc(var(--spacing) * 20);
+}
+
+.prose ol li + li {
+  margin-top: calc(var(--spacing) * 6);
+}
+
+.prose pre {
+  margin-block: calc(var(--spacing) * 30);
+  overflow-x: auto;
+  border-radius: var(--radius-xl);
+  background: var(--color-cream);
+  padding: calc(var(--spacing) * 20);
+  font-family: var(--font-mono);
+  font-size: var(--text-base);
+}
+
+.prose :not(pre) > code {
+  font-family: var(--font-mono);
+  font-size: var(--text-base);
+  background: var(--color-cream);
+  border-radius: var(--radius-md);
+  padding: calc(var(--spacing) * 2) calc(var(--spacing) * 6);
+}
+
+.prose figure {
+  margin-block: calc(var(--spacing) * 30);
+}
+
+/* In-body media (post images / clips). Token-only, mirroring the figure rules
+   above; keeps images from overflowing the measure and matches the site's
+   rounded-media language (hero figures, carousel, campus video). */
+.prose img,
+.prose video {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-xl);
+}
+
+.prose figcaption {
+  margin-top: calc(var(--spacing) * 10);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-gray);
+}
+
+.prose table {
+  display: block;
+  overflow-x: auto;
+  width: 100%;
+  margin-block: calc(var(--spacing) * 30);
+  border-collapse: collapse;
+  font-size: var(--text-base);
+}
+
+.prose th,
+.prose td {
+  border-bottom: 1px solid var(--color-cream);
+  padding: calc(var(--spacing) * 10) calc(var(--spacing) * 12);
+  text-align: left;
+  vertical-align: top;
+}
+
+.prose th {
+  font-family: var(--font-mono);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-black);
+}
+
+input[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%231d1d1d' viewBox='0 0 20 20'%3E%3Cpath d='M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94z'/%3E%3C/svg%3E");
+  cursor: pointer;
+  height: calc(var(--spacing) * 20);
+  width: calc(var(--spacing) * 20);
+}
+

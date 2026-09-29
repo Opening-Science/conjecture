@@ -171,7 +171,7 @@ function renderResults() {
   let t = '<table><thead><tr><th>Engine</th><th>Hypotheses</th><th>Candidates</th>' +
     '<th>Certified</th><th>Novelty yield</th><th>Mean citations</th></tr></thead><tbody>';
   for (const [e, v] of Object.entries(D.engines)) {
-    t += `<tr><td><strong>${esc(e)}</strong></td><td>${D.hypotheses[e] ?? '—'}</td>` +
+    t += `<tr><td><strong>${esc(e)}</strong></td><td>${D.hypotheses[e] ?? 'n/a'}</td>` +
       `<td>${v.candidates}</td><td>${v.certified}</td><td>${v.novel}</td>` +
       `<td>${v.mean_cites}</td></tr>`;
   }
@@ -186,7 +186,7 @@ function renderResults() {
       `). Certification requires unanimity across judge families, so the ${esc(fam)} judge's ` +
       `${Math.round(worst.other_rate * 100)}% pass rate on the other family's output drives much of ` +
       `the difference. These counts measure judge composition at least as much as engine quality ` +
-      `— see <a href="#" data-goto="verification">Verification</a>.`;
+      `(see <a href="#" data-goto="verification">Verification</a>).`;
   } else $('#bias-warn').style.display = 'none';
 
   $('#conv-list').innerHTML = D.convergences.map(g =>
@@ -227,8 +227,8 @@ function renderVerification() {
     '<th>Refutation recall</th><th>Called "support"</th></tr></thead><tbody>';
   for (const [v, r] of Object.entries(D.taskA)) {
     t += `<tr><td><strong>${esc(v)}</strong></td><td>${(r.accuracy*100).toFixed(1)}%</td>` +
-      `<td>${r.evidential_accuracy != null ? (r.evidential_accuracy*100).toFixed(1)+'%' : '—'}</td>` +
-      `<td>${r.refute_recall != null ? (r.refute_recall*100).toFixed(0)+'%' : '—'}</td>` +
+      `<td>${r.evidential_accuracy != null ? (r.evidential_accuracy*100).toFixed(1)+'%' : 'n/a'}</td>` +
+      `<td>${r.refute_recall != null ? (r.refute_recall*100).toFixed(0)+'%' : 'n/a'}</td>` +
       `<td>${(r.support_rate*100).toFixed(0)}%</td></tr>`;
   }
   const first = Object.values(D.taskA)[0];
@@ -346,8 +346,8 @@ function updateCmd() {
   $('#cmd').textContent = lines.join('\n');
 
   let w = '';
-  if (!engines.length) w += '<div class="note bad">No engine selected — nothing would be generated.</div>';
-  if (!judges.length) w += '<div class="note bad">No judge selected — candidates stay unjudged and nothing can be certified.</div>';
+  if (!engines.length) w += '<div class="note bad">No engine selected: nothing would be generated.</div>';
+  if (!judges.length) w += '<div class="note bad">No judge selected: candidates stay unjudged and nothing can be certified.</div>';
   else if (judges.length === 1) w += `<div class="note warn"><strong>Single judge family.</strong> Judges measurably prefer their own model family (see Verification). With one family judging, engines from that family will be over-certified and the scoreboard will not be comparable.</div>`;
   engines.map(eng).filter(e => e.gated).forEach(e => {
     const terms = (P.engines.find(x => x.id === e.id) || {}).output_terms;
@@ -384,8 +384,8 @@ function updateCmd() {
   $('#cost-out').innerHTML = nSeeds && engines.length ? `<table class="kv"><tbody>
       <tr><th>Depth</th><td>${esc(d.label)} · ${d.hypPerSeed}/seed · ${d.effortFlag} reasoning</td></tr>
       <tr><th>Hypotheses</th><td>~${genHyp} across ${nSeeds} seed${nSeeds === 1 ? '' : 's'}, ${engines.length} engine${engines.length === 1 ? '' : 's'}</td></tr>
-      <tr><th>Generation — API engines</th><td>${apiBill > 0 ? '~' + usd(apiBill) : '$0'} <span class="dim">${apiBill > 0 ? '' : 'only subscription engines chosen'}</span></td></tr>
-      <tr><th>Verification — theoria</th><td>${th.nClaims ? `$0 marginal · ${th.nClaims} claim${th.nClaims === 1 ? '' : 's'}${th.passes > 1 ? ' ×2 passes' : ''} <span class="dim">(~${usd(th.apiEquiv)} on the API tier; runs on subscription here)</span>` : 'off at this depth'}</td></tr>
+      <tr><th>Generation: API engines</th><td>${apiBill > 0 ? '~' + usd(apiBill) : '$0'} <span class="dim">${apiBill > 0 ? '' : 'only subscription engines chosen'}</span></td></tr>
+      <tr><th>Verification: theoria</th><td>${th.nClaims ? `$0 marginal · ${th.nClaims} claim${th.nClaims === 1 ? '' : 's'}${th.passes > 1 ? ' ×2 passes' : ''} <span class="dim">(~${usd(th.apiEquiv)} on the API tier; runs on subscription here)</span>` : 'off at this depth'}</td></tr>
       <tr><th><strong>API cost this run</strong></th><td><strong>${apiBill > 0 ? '~' + usd(apiBill) : '$0'}</strong> <span class="dim">judge families run on subscription</span></td></tr>
       <tr><th>Wall-clock</th><td>~${totalMin} min${hrs}</td></tr>
     </tbody></table>
@@ -407,7 +407,7 @@ function updateCmd() {
    with every verdict against it side by side. Two of the three verifier
    columns are ours; the third is theoria, which sees only the arithmetic.
    Keeping them in separate columns rather than folding them into one
-   score is deliberate — where they disagree is the interesting part, and
+   score is deliberate: where they disagree is the interesting part, and
    an average would hide exactly that. */
 let LEDGER = null, lgFilter = 'all', lgOpen = null;
 // per-column filters, free-text search, and sort. lgCol maps a column key
@@ -447,7 +447,7 @@ const VD = {
   queued:       ['',     'queued'],
   'n/a':        ['',     'no arithmetic'],
 };
-const pill = v => { const [c, l] = VD[v] || ['', v || '—'];
+const pill = v => { const [c, l] = VD[v] || ['', v || 'n/a'];
   return `<span class="pill ${c}">${esc(l)}</span>`; };
 
 function renderLedger() {
@@ -544,8 +544,8 @@ function renderLedger() {
         <td data-l="engine">${esc(r.engines)}</td>
         <td data-l="checks">${r.mechanical.pass ? '<span class="pill ok">pass</span>'
               : '<span class="pill bad">fail</span>'}</td>
-        <td data-l="claude judge">${cj ? pill(cj) : '—'}</td>
-        <td data-l="codex judge">${xj ? pill(xj) : '—'}</td>
+        <td data-l="claude judge">${cj ? pill(cj) : 'n/a'}</td>
+        <td data-l="codex judge">${xj ? pill(xj) : 'n/a'}</td>
         <td data-l="theoria">${pill(r.theoria.verdict)}</td>
       </tr>` + (lgOpen === r.id ? `<tr class="lgdet"><td colspan="8">${detail(r)}</td></tr>` : '');
   }).join('') : '<tr><td colspan="8">Nothing matches these filters.</td></tr>')
@@ -556,7 +556,7 @@ function renderLedger() {
      that carry arithmetic (${T.n - T.theoria_eligible} of ${T.n} propose an experiment without
      deriving a number, so there is nothing for it to re-derive). Of those it has ruled on:
      ${T.theoria_certified} correct, ${T.theoria_declined} incorrect,
-     ${T.theoria_inconclusive} inconclusive${T.theoria_error ? `, ${T.theoria_error} errored (re-queued)` : ''}. The count rises as pass-2 verdicts land — pass 1 was archived after an
+     ${T.theoria_inconclusive} inconclusive${T.theoria_error ? `, ${T.theoria_error} errored (re-queued)` : ''}. The count rises as pass-2 verdicts land: pass 1 was archived after an
      environment-description defect (see the theoria section on the Verification page), so the
      column re-fills from zero.`;
 
@@ -669,11 +669,13 @@ const safe = fn => { try { fn(); } catch (e) { console.error(fn.name, e); } };
 getJSON('pack.json').then(p => {
   adoptPack(p);
   [renderPack, renderStatusPills, renderRun].forEach(safe);
-  if (p.has_findings)
-    fetch('findings.html').then(r => r.ok ? r.text() : '').then(h => {
-      const n = $('#pack-findings'); if (n && h) n.innerHTML = h;
-      [renderVerification, renderFigures].forEach(safe);   // findings may hold figure slots
-    });
+  const putFindings = h => {
+    const n = $('#pack-findings'); if (n && h) n.innerHTML = h;
+    [renderVerification, renderFigures].forEach(safe);   // findings may hold figure slots
+  };
+  if (p.findings_html) putFindings(p.findings_html);        // static export
+  else if (p.has_findings)                                   // local server
+    fetch('findings.html').then(r => r.ok ? r.text() : '').then(putFindings);
   return getJSON('data.json').then(d => {
     D = d;
     [renderOverview, renderResults, renderVerification, renderFigures].forEach(safe);
@@ -724,7 +726,7 @@ function renderTheoria() {
     card(`${T.theoria_run}/${T.theoria_eligible}`, 'claims run through theoria') +
     card(T.theoria_certified, 'arithmetic holds') +
     card(T.theoria_declined, 'arithmetic does not hold') +
-    card(T.theoria_inconclusive, 'inconclusive — its own proof unverified');
+    card(T.theoria_inconclusive, 'inconclusive: its own proof unverified');
 
   // where the two audits disagree is the whole reason for running both
   const split = LEDGER.rows.filter(r =>
@@ -749,7 +751,7 @@ function renderTheoria() {
       '</tbody></table>'
      : `<p>No disagreement so far: on every claim theoria has ruled on, it and our judges
         agree. With ${ruled} claim${ruled === 1 ? '' : 's'} ruled on, that is not yet a
-        result — it is a small sample, and the interesting cases are the ones still queued.</p>`);
+        result: it is a small sample, and the interesting cases are the ones still queued.</p>`);
 }
 
 
@@ -758,7 +760,7 @@ function renderTheoria() {
    Editorial SVG, derived from the diagram-design discipline mapped onto
    the OSF palette: flat, self-contained, thin strokes, mono labels, and
    the accent reserved for the single thing the reader should see first.
-   Every number is read from data.json at render time — the figures
+   Every number is read from data.json at render time: the figures
    cannot drift from the tables. */
 // data marks are ink; blue is reserved for a single annotation, never a
 // data surface; gridlines use the cream-dark line token, not a surface.
@@ -874,7 +876,7 @@ function renderFigures() {
 /* ================= RUN TRIGGER =================
    Talks to server.py's four endpoints. If the site is served by a plain
    static server the fetches fail and the panel says so instead of
-   pretending — a dead Run button is worse than an honest absence. */
+   pretending: a dead Run button is worse than an honest absence. */
 let API = null, logTimer = null;
 
 async function api(path, body) {
@@ -948,8 +950,8 @@ function renderClaimPicker(claims) {
   const TERMINAL = ['certified', 'declined', 'inconclusive'];
   const open = claims.filter(c => !TERMINAL.includes(c.verdict)).length;
   return `<div class="claim-picker">
-    <p class="dim">Tick the claims to verify — nothing is pre-ticked, and each one is
-    ~25–35 min and ~6M tokens on the Codex subscription. ${open} of ${claims.length} still
+    <p class="dim">Tick the claims to verify: nothing is pre-ticked, and each one is
+    ~25 to 35 min and ~6M tokens on the Codex subscription. ${open} of ${claims.length} still
     open; settled claims are shown with their verdict and cannot be re-queued from here.</p>
     ${claims.map(c => {
       const settled = TERMINAL.includes(c.verdict);
@@ -999,7 +1001,7 @@ async function initRunPanel() {
         .map(i => i.dataset.claim);
       if (jobs.includes('theoria') && !claims.length) {
         $('#run-state').textContent =
-          'theoria: tick the claim(s) to verify — it never sweeps the queue';
+          'theoria: tick the claim(s) to verify; it never sweeps the queue';
         return;
       }
       try { await api('/api/run', {jobs, claims}); pollRun(); }
@@ -1031,7 +1033,7 @@ fetch('ledger.json').then(r => r.json()).then(d => { LEDGER = d; renderLedger();
   });
 
 /* ================= CORPUS INTAKE =================
-   Parses a seed bibliography in the browser — nothing is uploaded. We
+   Parses a seed bibliography in the browser: nothing is uploaded. We
    extract what stage A actually needs (DOIs, failing that titles), report
    honestly what could not be resolved, and emit the seed CSV plus the
    exact command sequence. The heavy lifting stays in the documented CLI;
@@ -1146,7 +1148,7 @@ function renderCorpusIntake() {
           `</tbody></table><button id="dlpdf">Download ${esc(name)}_curated.csv</button>` +
           (withDoi < pdfs.length ? `<div class="note warn">${pdfs.length - withDoi} file(s)
             carry no DOI in the filename. Fill the doi and title columns in the CSV before
-            ingesting — a curated work with neither cannot be cross-referenced against the
+            ingesting: a curated work with neither cannot be cross-referenced against the
             field map, and will be ingested as an unlinked reference.</div>` : '');
         const b = $('#dlpdf');
         if (b) b.onclick = () => {
@@ -1191,7 +1193,7 @@ function renderCorpusIntake() {
     $('#corpus-cmd').innerHTML =
       `<h3>Commands for this corpus</h3><pre><code>${esc(L.join('\n'))}</code></pre>` +
       (reg ? '' : '<div class="note warn">Without a claim registry you can generate and certify ' +
-        'hypotheses, but you cannot measure rediscovery or benchmark a verifier — there is no ' +
+        'hypotheses, but you cannot measure rediscovery or benchmark a verifier: there is no ' +
         'ground truth to score against.</div>');
   };
 

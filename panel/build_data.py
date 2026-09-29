@@ -48,11 +48,19 @@ def _hypotheses_per_engine() -> dict[str, int]:
     return out
 
 
+def _plain(text: str) -> str:
+    """Questions shown without long dashes (the OSF brand's copy rule);
+    the seed files themselves are run history and stay as they were."""
+    for dash in (" \u2014 ", " \u2013 "):
+        text = text.replace(dash, ", ")
+    return text.replace("\u2014", ", ").replace("\u2013", " to ")
+
+
 def _questions() -> list[list[str]]:
     qs = []
     for f in sorted(PACK.seeds_dir.glob("*.json")):
         s = _load(f, {})
-        qs.append([s.get("seed_id", f.stem), s.get("title", "")])
+        qs.append([s.get("seed_id", f.stem), _plain(s.get("title", ""))])
     return qs
 
 
