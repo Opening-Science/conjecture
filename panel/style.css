@@ -83,11 +83,13 @@ main{max-width:87rem;margin:0 auto;padding:60px 20px 140px}
 section>*+*{margin-top:0}
 
 /* ── type ───────────────────────────────────────────────────────── */
-h1{font-size:3rem;line-height:1;font-weight:500;margin:0 0 40px;
+h1,.page-title{font-size:3rem;line-height:1;font-weight:500;margin:0 0 40px;
   max-width:18ch;letter-spacing:-.01em}
-@media(min-width:40rem){h1{font-size:4rem}}
-@media(min-width:64rem){h1{font-size:5rem}}
-h1 .blue{color:var(--color-blue)}
+@media(min-width:40rem){h1,.page-title{font-size:4rem}}
+@media(min-width:64rem){h1,.page-title{font-size:5rem}}
+h1 .blue,.page-title .blue{color:var(--color-blue)}
+/* one h1 per document: the sections are views of one page */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 /* the section label: mono, uppercase, blue — a <p>, not a heading */
 .label{font-family:var(--font-mono);font-size:var(--text-xl);font-weight:700;
   letter-spacing:.02em;text-transform:uppercase;color:var(--color-blue);

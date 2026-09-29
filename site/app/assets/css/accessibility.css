@@ -1,0 +1,12 @@
+/* SPDX-FileCopyrightText: 2026 Open Science Stiftung (Open Science Foundation) */
+/* SPDX-License-Identifier: Apache-2.0 */
+/* Honor reduced motion without changing the canonical theme snapshot. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+    transition-duration: 0s !important;
+    transition-delay: 0s !important;
+  }
+}

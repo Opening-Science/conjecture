@@ -35,15 +35,27 @@ def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawTextHelpFormatter)
     ap.add_argument("--out", type=Path, required=True)
+    ap.add_argument("--font-base", default=None,
+                    help="where the site serves the licensed fonts, e.g. "
+                         "/fonts/ (default: fonts/ next to the page)")
     a = ap.parse_args()
     out = a.out
     out.mkdir(parents=True, exist_ok=True)
     for f in STATIC:
         shutil.copy2(PANEL / f, out / f)
+    if a.font_base:       # served from the host site's own font directory
+        css = out / "style.css"
+        css.write_text(css.read_text(encoding="utf-8").replace(
+            'url("fonts/', f'url("{a.font_base}'), encoding="utf-8")
     shutil.copytree(PANEL / "img", out / "img", dirs_exist_ok=True)
 
     pj = build_data.pack_json(local=False)
     pj["static"] = True
+    # the pack's findings travel inside pack.json: a loose HTML fragment
+    # would be served, and checked, as if it were a page of its own
+    findings = PACK.outputs_dir / "panel" / "findings.html"
+    if findings.is_file():
+        pj["findings_html"] = findings.read_text(encoding="utf-8")
     (out / "pack.json").write_text(json.dumps(pj, indent=1,
                                               ensure_ascii=False) + "\n")
     try:
@@ -53,11 +65,9 @@ def main() -> None:
     else:
         (out / "data.json").write_text(json.dumps(data, indent=1,
                                                   ensure_ascii=False) + "\n")
-    for src, name in ((PACK.ledger, "ledger.json"),
-                      (PACK.outputs_dir / "panel" / "findings.html",
-                       "findings.html")):
-        if src.is_file():
-            shutil.copy2(src, out / name)
+    if PACK.ledger.is_file():
+        shutil.copy2(PACK.ledger, out / "ledger.json")
+    (out / "findings.html").unlink(missing_ok=True)   # from older exports
 
     leaked = [p.name for p in out.rglob("*") if p.is_file()
               and str(Path.home()) in p.read_text(errors="ignore")]

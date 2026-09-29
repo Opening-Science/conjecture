@@ -1,0 +1,23 @@
+{
+  "$comment": "Active subset of the upstream allowlist. New exceptions require design-extend approval.",
+  "classes": [
+    {
+      "value": "tracking-[2%]",
+      "reason": "production-verbatim (mirror parity) \u2014 section-label letter spacing, used in 9 sections"
+    },
+    {
+      "value": "rounded-[9px]",
+      "reason": "production-verbatim (mirror parity) \u2014 button/input radius across CTAs, forms, cookie banner"
+    },
+    {
+      "value": "lg:grid-cols-[10rem_1fr_auto]",
+      "reason": "admitted 2026-07-22 via /design-extend (PostList.md) \u2014 ledger row grid (date / content / tags); one-off editorial layout"
+    }
+  ],
+  "cssValues": [
+    {
+      "value": "#1d1d1d",
+      "reason": "production-verbatim (mirror parity) \u2014 select-arrow SVG data URI in main.css uses %231d1d1d (equals --color-black; url() cannot reference CSS variables)"
+    }
+  ]
+}

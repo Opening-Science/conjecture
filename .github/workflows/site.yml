@@ -1,0 +1,80 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# Build the Conjecture website (site/) with the biophoton pack's run panel
+# and deploy it to GitHub Pages. Manual only: publishing is an explicit
+# decision, so this never runs on push.
+#
+# Licensed fonts are not in git. To render with them, store them as the
+# assets of a release in a private repository and set the repository
+# variable OSF_FONTS_REPO (owner/name) and OSF_FONTS_TAG, plus the secret
+# OSF_FONTS_TOKEN (read access to that repository). Without them the site
+# builds with fallback fonts.
+name: site
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: Opening-Science/conjecture-pack-biophotons
+          path: pack
+          token: ${{ secrets.PACK_TOKEN || github.token }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - name: Site data and the pack's read-only run panel
+        run: python site/scripts/hub-data.py
+        env:
+          CONJECTURE_PACK: ${{ github.workspace }}/pack/pack.yaml
+      - name: Licensed fonts (optional)
+        env:
+          GH_TOKEN: ${{ secrets.OSF_FONTS_TOKEN }}
+          REPO: ${{ vars.OSF_FONTS_REPO }}
+          TAG: ${{ vars.OSF_FONTS_TAG }}
+        run: |
+          if [ -n "$GH_TOKEN" ] && [ -n "$REPO" ]; then
+            gh release download "${TAG:-fonts}" -R "$REPO" -p '*.woff2' -p '*.woff' -D site/public/fonts
+          else
+            echo "No font source configured: building with fallback fonts."
+          fi
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+      - name: Checks and static build
+        working-directory: site
+        run: |
+          npm ci
+          npm run design:check
+          npm run design:tokens:check
+          npm test
+          npm run typecheck
+          npm run generate
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site/.output/public
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

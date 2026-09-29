@@ -1,0 +1,35 @@
+version = 1
+
+[[annotations]]
+path = ["**"]
+SPDX-FileCopyrightText = "2026 Open Science Stiftung (Open Science Foundation)"
+SPDX-License-Identifier = "Apache-2.0"
+
+[[annotations]]
+path = [
+  "app/assets/css/main.css",
+  "scripts/design-check.mjs",
+  "scripts/design-tokens.mjs",
+  "app/utils/ui.ts",
+  "app/components/layout/SkipLink.vue",
+  "app/components/section/SectionIntro.vue",
+  "design/components/SectionIntro.md",
+  "app/components/section/MediaCarousel.vue",
+  "design/components/MediaCarousel.md",
+  "app/components/section/PostList.vue",
+  "design/components/PostList.md",
+  "app/components/ui/Tag.vue",
+  "design/components/Tag.md",
+  "app/components/ui/Citation.vue",
+  "design/components/Citation.md",
+  "app/components/ui/LicenseNotice.vue",
+  "design/components/LicenseNotice.md",
+  "LICENSE",
+  "design/allowlist.json",
+  "design/components/grandfathered.json",
+  "design/system/tokens.json",
+  "design/system/css-variables.css"
+]
+precedence = "closest"
+SPDX-FileCopyrightText = "2026 Open Science Stiftung (Open Science Foundation)"
+SPDX-License-Identifier = "MIT"

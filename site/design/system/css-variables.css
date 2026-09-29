@@ -1,0 +1,56 @@
+/*
+ * GENERATED from app/assets/css/main.css @theme — regenerate via
+ * npm run design:tokens; do not hand-edit.
+ *
+ * Plain custom-property export of the canonical theme tokens, for use
+ * outside Tailwind (prototypes, emails, external tools). main.css remains
+ * the single source of truth.
+ */
+:root {
+  --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-mono: "ABCDiatypeSemiMono", monospace;
+  --font-body: "Selecta", sans-serif;
+  --spacing: 0.0625rem;
+  --container-3xl: 48rem;
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+  --radius-md: 0.375rem;
+  --radius-xl: 0.75rem;
+  --radius-2xl: 1rem;
+  --color-white: #fff;
+  --color-black: #1d1d1d;
+  --color-gray: #646363;
+  --color-gray-light: #eee;
+  --color-blue: #73adff;
+  --color-blue-ink: #1c4e8f;
+  --color-cream-light: #f8f8f4;
+  --color-cream: #efeee7;
+  --color-cream-dark: #c0beb2;
+  --color-cream-darker: #6f6e66;
+  --color-yellow: #e3be00;
+  --color-yellow-light: #fefbe9;
+  --color-red: #a85450;
+  --color-button: #323232;
+  --color-button-hover: #000;
+  --text-sm: 0.875rem;
+  --text-sm--line-height: 1.2;
+  --text-base: 1rem;
+  --text-base--line-height: 1.2;
+  --text-xl: 1.125rem;
+  --text-xl--line-height: 1.2;
+  --text-1xl: 1.3125rem;
+  --text-1xl--line-height: 1.2;
+  --text-2xl: 1.875rem;
+  --text-2xl--line-height: 1.2;
+  --text-3xl: 2.25rem;
+  --text-3xl--line-height: 1.1;
+  --text-4xl: 2.5rem;
+  --text-4xl--line-height: 1.1;
+  --text-5xl: 3.25rem;
+  --text-5xl--line-height: 1;
+  --spacing-header: 5rem;
+  --spacing-header-mobile: 5rem;
+  --spacing-container: 87rem;
+}
