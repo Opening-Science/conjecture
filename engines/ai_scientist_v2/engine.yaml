@@ -20,3 +20,7 @@ cost:
   provider: openai
   tokens_per_hypothesis: {input: 600000, output: 30000}
 blocker: API key; licence gate on output
+notes: >-
+  Its licence restricts use in ways the AGPL does not allow in a combined
+  program, so an adapter must run it as a separate process and exchange
+  data with it (as over a CLI or MCP), never import it into the hub.

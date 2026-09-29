@@ -16,7 +16,7 @@ pack's corpus with no custom code.
 
 (Not to be confused with Conjecture, the AI-safety company. This is the
 Open Science Foundation's hypothesis hub; the PyPI name is
-`conjecture-hub`.)
+`conjecture-hub`.) Free software under the AGPL-3.0-or-later.
 
 ```
 seeds            generation           merge          certification        output
@@ -222,9 +222,8 @@ knowledgebase table for table. Credentials come from the environment
 only, and the API key is redacted from any error. Clustering, contact
 data and a pack's claim curation are deliberately not part of it.
 
-Two of its dependencies are copyleft (Unidecode GPL-2.0+, PyMuPDF
-AGPL-3.0), which is why they live in `requirements-builder.txt` and not
-in the hub's own requirements.
+Its dependencies are in `requirements-builder.txt`, separate from the
+hub's because only the builder needs them.
 
 ## The run panel
 
@@ -291,3 +290,21 @@ Engines that need API keys (LLNL Co-Scientist, HypoGeniC, Robin,
 SciAgents, OpenScientist, AI Scientist v2) have manifests but no adapter
 yet; `connectors/STATUS.md` lists what each is waiting for. The engines
 that ran need no key, which is why they ran first.
+
+## Licence
+
+The hub is free software under the GNU Affero General Public License,
+version 3 or later (`LICENSE`). Copyleft throughout, and chosen over the
+GPL because the hub is meant to be run as a service too: whoever offers a
+modified hub over a network (the panel, the MCP server) must offer its
+source to the people using it. Its copyleft dependencies (PyMuPDF,
+AGPL-3.0; Unidecode, GPL-2.0-or-later) are compatible with that, as are
+the MIT and Apache-2.0 upstream engines it adapts.
+
+One upstream is not: the AI Scientist v2 ships under a use-restricted
+licence that the AGPL does not allow to be combined into one program, so
+an adapter for it must run it as a separate process (as the hub already
+does with engines it reaches over a CLI or MCP), never import it.
+
+Packs choose their own licence for their data; the biophoton pack's is
+CC BY-SA 4.0.

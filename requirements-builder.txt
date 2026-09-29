@@ -1,6 +1,6 @@
 # The corpus builder (builder/), on top of requirements.txt. Separate
-# because two of these carry copyleft licences that the hub itself
-# (Apache-2.0) does not: installing them is the builder user's choice.
+# because only the builder needs them. All are compatible with the hub's
+# AGPL-3.0-or-later: the copyleft ones are marked.
 httpx>=0.27            # BSD-3-Clause
 tenacity>=8            # Apache-2.0
 pandas>=2              # BSD-3-Clause
