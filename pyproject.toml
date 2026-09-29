@@ -3,7 +3,7 @@ name = "conjecture-hub"
 version = "0.1.0"
 description = "Conjecture: the Open Science Foundation hypothesis hub"
 readme = "README.md"
-license = "Apache-2.0"
+license = "AGPL-3.0-or-later"
 requires-python = ">=3.11"
 dependencies = ["pyyaml>=6", "jsonschema>=4.20"]
 

@@ -24,9 +24,9 @@ curation, which the knowledgebase stage carries over on rebuild.
     python builder/run.py --from I         # I and everything after it
     python builder/run.py --list
 
-OPENALEX_API_KEY and OPENALEX_MAILTO come from the environment. Stage J
-needs PyMuPDF, which is AGPL-licensed and therefore an optional extra
-(requirements-builder.txt), not a hub dependency.
+OPENALEX_API_KEY and OPENALEX_MAILTO come from the environment. The
+builder's dependencies, PyMuPDF (AGPL) and Unidecode (GPL-2.0+) among
+them, are in requirements-builder.txt.
 """
 from __future__ import annotations
 
