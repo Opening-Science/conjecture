@@ -59,6 +59,13 @@ class TestFieldSchema(unittest.TestCase):
         f["sources"]["scholarx"] = {"enabled": True}
         self.assertTrue(errors(f))
 
+    def test_theses_need_a_source(self):
+        f = copy.deepcopy(MINIMAL)
+        f["theses"] = {"source": "theses.md"}
+        self.assertEqual(errors(f), [])
+        f["theses"] = {}
+        self.assertTrue(errors(f))
+
     def test_proposals_only_in_funding_fields(self):
         f = copy.deepcopy(MINIMAL)
         f["documents"] = [{"title": "P", "kind": "proposal", "path": "p.pdf"}]

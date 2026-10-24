@@ -85,6 +85,13 @@
         "min_accepted": {"type": "integer", "minimum": 1, "default": 20}
       }
     },
+    "theses": {
+      "type": "object", "required": ["source"], "additionalProperties": false,
+      "description": "The board's theses as atomic claims, each typed empirical, legal, normative or differentiation. They act as registry entries (restatements score zero) and are re-tested per snapshot.",
+      "properties": {
+        "source": {"type": "string"}
+      }
+    },
     "prompts": {
       "type": "object", "required": ["domain", "causal_levels", "verifier_setting"],
       "description": "As v1 pack.yaml prompts.",
