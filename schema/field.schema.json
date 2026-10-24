@@ -1,0 +1,263 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Opening-Science/conjecture/schema/field.schema.json",
+  "title": "Conjecture v2 field definition (field.yaml)",
+  "description": "Everything that ties a v2 run to one field. A superset of v1's pack.yaml: prompts, questions and outputs keep v1's shape so v1 engines run unchanged. Draft (P0, 24 Oct 2026); see project-docs/14 in the Open & Private workspace.",
+  "type": "object",
+  "required": ["field_version", "name", "title", "use", "description", "keywords", "lenses", "questions", "prompts", "sources", "growth", "outputs", "state"],
+  "additionalProperties": false,
+  "properties": {
+    "field_version": {"const": 2},
+    "extends": {"type": "string", "description": "Path to another field.yaml; dicts merge key by key, as v1 pack overlays."},
+    "name": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+    "title": {"type": "string"},
+    "use": {
+      "enum": ["funding", "investment", "both"],
+      "description": "Which decisions this field's corpus may serve. Proposals submitted to OSF are allowed only under 'funding' (the proposal firewall); the ask router refuses requests whose decision context does not match."
+    },
+    "description": {
+      "type": "string", "minLength": 200,
+      "description": "A paragraph defining the field. It is embedded and becomes the relevance anchor for growth."
+    },
+    "keywords": {"type": "array", "minItems": 3, "items": {"type": "string"}, "uniqueItems": true},
+    "queries": {
+      "type": "array",
+      "description": "Explicit search queries for the keyword route, beyond the keywords.",
+      "items": {
+        "type": "object", "required": ["text"], "additionalProperties": false,
+        "properties": {
+          "text": {"type": "string"},
+          "sources": {"type": "array", "items": {"$ref": "#/$defs/source_name"}},
+          "lens": {"type": "string"}
+        }
+      }
+    },
+    "seeds": {
+      "type": "object", "required": ["file"], "additionalProperties": false,
+      "description": "Seed works. CSV with at least one identifier column among doi, arxiv, openalex_id, url, pdf; optional lens and seed_role columns. v1 seeds.csv files qualify (their 'track' column is read as lens).",
+      "properties": {
+        "file": {"type": "string"},
+        "lens_column": {"type": "string", "default": "lens"}
+      }
+    },
+    "documents": {
+      "type": "array",
+      "description": "Curated works outside the scholarly indexes (v1's refs stage): regulation, standards, reports, the user's own notes. Never coupled by citation; reconciled on their own line (gate G5).",
+      "items": {
+        "type": "object", "required": ["title", "kind"], "additionalProperties": false,
+        "anyOf": [{"required": ["path"]}, {"required": ["url"]}],
+        "properties": {
+          "title": {"type": "string"},
+          "path": {"type": "string"},
+          "url": {"type": "string", "format": "uri"},
+          "kind": {"enum": ["regulation", "guidance", "standard", "report", "dataset", "note", "proposal"]},
+          "lens": {"type": "string"},
+          "year": {"type": "integer"}
+        }
+      }
+    },
+    "lenses": {
+      "type": "object", "minProperties": 1,
+      "description": "v1's tracks, generalised: how the field is cut for reading. Scored by embedding against definition and examples; pattern is an optional transparent cross-check.",
+      "additionalProperties": {"$ref": "#/$defs/lens"}
+    },
+    "facets": {
+      "type": "object",
+      "description": "Cross-cutting filters that are not lenses (v1's 'health'), reported as shares per cluster and lens.",
+      "additionalProperties": {
+        "type": "object", "required": ["definition"], "additionalProperties": false,
+        "properties": {"definition": {"type": "string"}, "pattern": {"type": "string"}}
+      }
+    },
+    "questions": {
+      "type": "object", "required": ["source"], "additionalProperties": false,
+      "description": "Open questions for generate mode, in v1's questions.md format.",
+      "properties": {
+        "source": {"type": "string"},
+        "entry_queries": {"type": "object", "additionalProperties": {"type": "array", "items": {"type": "string"}}}
+      }
+    },
+    "gold": {
+      "type": "object", "required": ["source"], "additionalProperties": false,
+      "description": "The field's gold question set for evaluation. Questions and reference answers are written by human experts only.",
+      "properties": {
+        "source": {"type": "string"},
+        "min_accepted": {"type": "integer", "minimum": 1, "default": 20}
+      }
+    },
+    "prompts": {
+      "type": "object", "required": ["domain", "causal_levels", "verifier_setting"],
+      "description": "As v1 pack.yaml prompts.",
+      "properties": {
+        "domain": {"type": "string"},
+        "causal_levels": {"type": "string"},
+        "causal_level_labels": {"type": "object", "additionalProperties": {"type": "string"}},
+        "verifier_setting": {"type": "string"}
+      }
+    },
+    "measurement_areas": {
+      "type": "array", "description": "As v1; kept so experiment cards still map.",
+      "items": {
+        "type": "object", "required": ["pattern", "area"], "additionalProperties": false,
+        "properties": {"pattern": {"type": "string"}, "area": {"type": "string"}}
+      }
+    },
+    "claim_schema": {
+      "type": "object", "additionalProperties": false,
+      "description": "Types for the claim layer (phase P7). Every extracted claim keeps its work and sentence.",
+      "properties": {
+        "entities": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "relations": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "quantities": {
+          "type": "array",
+          "items": {
+            "type": "object", "required": ["name"], "additionalProperties": false,
+            "properties": {"name": {"type": "string"}, "unit": {"type": "string"}, "pattern": {"type": "string"}}
+          }
+        }
+      }
+    },
+    "sources": {
+      "type": "object",
+      "description": "Connectors this field may use. A source whose licence does not allow commercial use is excluded from answers in an investment context (store views *_commercial).",
+      "required": ["openalex"],
+      "propertyNames": {"$ref": "#/$defs/source_name"},
+      "additionalProperties": {"$ref": "#/$defs/source"}
+    },
+    "growth": {
+      "type": "object", "required": ["routes", "relevance", "stop", "budget"], "additionalProperties": false,
+      "properties": {
+        "routes": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": {"enum": ["citation_backward", "citation_forward", "keyword", "similar", "recommend", "user"]}
+        },
+        "relevance": {
+          "type": "object", "required": ["embedding_model", "labeller"], "additionalProperties": false,
+          "properties": {
+            "embedding_model": {"type": "string"},
+            "labeller": {"type": "string", "description": "llm:<model id> or human"},
+            "audit_fraction": {"type": "number", "minimum": 0, "maximum": 1, "default": 0.1},
+            "min_kappa": {"type": "number", "minimum": 0, "maximum": 1, "default": 0.7},
+            "admit_threshold": {"type": "number", "minimum": 0, "maximum": 1}
+          }
+        },
+        "stop": {
+          "type": "object", "required": ["min_relevant_share", "window"], "additionalProperties": false,
+          "description": "Stop when the share of relevant works among the last `window` scored candidates falls below min_relevant_share, or the budget runs out.",
+          "properties": {
+            "min_relevant_share": {"type": "number", "minimum": 0, "maximum": 1},
+            "window": {"type": "integer", "minimum": 50},
+            "max_rounds": {"type": "integer", "minimum": 1}
+          }
+        },
+        "budget": {
+          "type": "object", "required": ["works"], "additionalProperties": false,
+          "properties": {
+            "works": {"type": "integer", "minimum": 100},
+            "pdf_gb": {"type": "number", "minimum": 0},
+            "openalex_usd": {"type": "number", "minimum": 0, "description": "Total pay-as-you-go spend allowed for this field."}
+          }
+        },
+        "inclusion": {
+          "type": "object", "additionalProperties": false,
+          "properties": {
+            "years": {"type": "array", "items": {"type": "integer"}, "minItems": 2, "maxItems": 2},
+            "types": {"type": "array", "items": {"type": "string"}},
+            "languages": {"type": "array", "items": {"type": "string"}}
+          }
+        },
+        "phantom_refs": {
+          "type": "object", "additionalProperties": {"type": "string"},
+          "description": "OpenAlex ids whose citations are dropped as misattributed, with the reason (v1 clustering.phantom_refs)."
+        },
+        "holdout_fraction": {"type": "number", "minimum": 0, "maximum": 0.5, "default": 0.2,
+                             "description": "Share of seeds hidden from growth to measure recall."}
+      }
+    },
+    "views": {
+      "type": "object", "additionalProperties": false,
+      "properties": {
+        "clustering": {
+          "type": "object", "additionalProperties": false,
+          "properties": {
+            "text_edges_k": {"type": "integer", "minimum": 0},
+            "text_weight_sweep": {"type": "array", "items": {"type": "number", "minimum": 0}},
+            "resolution_sweep": {"type": "array", "items": {"type": "number", "exclusiveMinimum": 0}},
+            "runs": {"type": "integer", "minimum": 1}
+          }
+        },
+        "separated": {"type": "array", "items": {"type": "string"},
+                      "description": "Lenses whose homes must be pairwise distinct (gate G1)."}
+      }
+    },
+    "repos": {
+      "type": "object",
+      "description": "GitHub harvest settings; v1 build.repos carried over unchanged (search, dependents, stale_months, refine)."
+    },
+    "audit": {
+      "type": "object", "additionalProperties": false,
+      "properties": {
+        "record_requester": {"const": true, "default": true},
+        "decision_contexts": {
+          "type": "array", "uniqueItems": true,
+          "items": {"enum": ["research", "funding_call", "grant_review", "investment"]}
+        }
+      }
+    },
+    "outputs": {
+      "type": "object", "required": ["dir"],
+      "properties": {"dir": {"type": "string"}, "inventory": {"type": "string"}, "ledger": {"type": "string"}}
+    },
+    "state": {"type": "string"},
+    "store": {"type": "string", "description": "Path to the v2 store (SQLite). Default: <state>/store.sqlite"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"use": {"enum": ["investment", "both"]}}},
+      "then": {
+        "properties": {
+          "documents": {"items": {"properties": {"kind": {"not": {"const": "proposal"}}}}},
+          "audit": {"properties": {"decision_contexts": {"contains": {"const": "investment"}}}}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"use": {"const": "funding"}}},
+      "then": {
+        "properties": {"audit": {"properties": {"decision_contexts": {"not": {"contains": {"const": "investment"}}}}}}
+      }
+    }
+  ],
+  "$defs": {
+    "source_name": {"enum": ["openalex", "semantic_scholar", "crossref", "arxiv", "grobid", "github", "ecosystems", "lens", "epo", "user", "llm"]},
+    "source": {
+      "type": "object", "required": ["enabled"], "additionalProperties": false,
+      "properties": {
+        "enabled": {"type": "boolean"},
+        "licence": {"type": "string", "description": "Licence of the data as used, e.g. CC0-1.0, S2-API-licence."},
+        "commercial_ok": {"type": "boolean", "description": "May data from this source inform an investment decision? Semantic Scholar: false until AI2 grants permission."},
+        "key_env": {"type": "string", "description": "Environment variable holding the API key; keys are never written to disk."},
+        "budget_usd_per_day": {"type": "number", "minimum": 0},
+        "routes": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "lens": {
+      "type": "object", "required": ["title", "definition"], "additionalProperties": false,
+      "properties": {
+        "title": {"type": "string"},
+        "definition": {"type": "string", "minLength": 40},
+        "examples": {"type": "array", "items": {"type": "string"}, "description": "DOIs, arXiv ids or OpenAlex ids of exemplary works."},
+        "pattern": {"type": "string", "description": "Optional title regex, the transparent cross-check."},
+        "qualified": {
+          "type": "array",
+          "description": "Terms that count for this lens only when a facet also matches (v1 health_qualified).",
+          "items": {
+            "type": "object", "required": ["pattern", "facet"], "additionalProperties": false,
+            "properties": {"pattern": {"type": "string"}, "facet": {"type": "string"}}
+          }
+        },
+        "search": {"type": "array", "items": {"type": "string"}, "description": "Extra keyword-route phrases for this lens."}
+      }
+    }
+  }
+}
