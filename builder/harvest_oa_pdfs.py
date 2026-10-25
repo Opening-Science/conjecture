@@ -159,7 +159,7 @@ def oa_works() -> pd.DataFrame:
     oa["prio"] = (
         (oa["is_seed"] == 1).astype(int) * 1000
         + (oa["hop"] <= 1).astype(int) * 500
-        + (oa["community_norm"] == 0).astype(int) * 250
+        + (oa["community_norm"] == 0).fillna(False).astype(int) * 250
     )
     oa = oa.sort_values(["prio", "cited_by_count"], ascending=False)
     return oa.reset_index(drop=True)
