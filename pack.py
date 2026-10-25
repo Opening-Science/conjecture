@@ -17,7 +17,7 @@ extend another and override parts of it (see read_raw).
 from __future__ import annotations
 
 import os
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 
 import yaml
@@ -62,6 +62,9 @@ class Pack:
     # where this pack's run state lives: everything a run writes, so the
     # hub directory holds code only
     state_dir: Path
+    # optional prompt wording a field overrides (prompt.py, certify.py,
+    # build_seeds.py fall back to the hub's original text)
+    prompt_extras: dict[str, str] = field(default_factory=dict)
 
     @property
     def seeds_dir(self) -> Path:
@@ -170,6 +173,7 @@ def load(path: Path | None = None) -> Pack:
         inventory=rel(out.get("inventory")),
         ledger=rel(out.get("ledger")) or rel(out["dir"]) / "ledger.json",
         state_dir=rel(raw["state"]),
+        prompt_extras={k: v for k, v in (prompts.get("extras") or {}).items()},
     )
 
 
