@@ -10,8 +10,10 @@ mechanical for existence and judged for support.
 
 Three verdicts per candidate, mirroring theoria's funnel:
   CERTIFIED  every load-bearing step survived
-  DECLINED   a load-bearing step failed; the failing step is named
-  PEDANTIC   only non-load-bearing steps failed (recorded, not fatal)
+  DECLINED   a load-bearing step failed, or any citation is misattributed;
+             the failing step is named
+  PEDANTIC   only non-load-bearing steps failed (recorded, not fatal);
+             never a misattributed citation
 
 Stage 1 (mechanical, free) runs here: citation existence, scope
 completeness, experiment specificity, registry-restatement check. It
@@ -155,7 +157,9 @@ Audit each rationale step:
 - a "citation" step survives only if the cited works, as shown to you, \
 actually assert what the step claims. A work that is merely on the same \
 topic does NOT support a specific claim. Misattribution is the failure \
-you are hunting.
+you are hunting, and it is always fatal: if any cited work, as shown, \
+does not assert what a step attributes to it, the verdict is \
+"declined", even when other steps could carry the argument.
 - a "computation" step survives only if the stated reasoning is \
 checkable and correct on its face.
 - a "given" step survives if it restates the question honestly.
@@ -172,8 +176,9 @@ concluded?
 Verdict for each item:
   "certified"  every load-bearing step survived; grounded and testable
   "pedantic"   sound overall, but a non-load-bearing step is flawed \
-(say which)
-  "declined"   a load-bearing step failed; name the step and why
+(say which); a misattributed citation is never pedantic
+  "declined"   a load-bearing step failed, or any citation is \
+misattributed; name the step and why
 
 Return ONLY a JSON array:
 [{"candidate_id": "C001", "verdict": "certified|pedantic|declined", \
