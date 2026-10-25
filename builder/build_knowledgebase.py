@@ -220,6 +220,7 @@ def main() -> None:
     # --- search index -----------------------------------------------------
     out.executescript("""
     CREATE INDEX idx_w_comm ON works(community);
+    CREATE INDEX idx_w_id ON works(work_id);
     CREATE INDEX idx_w_strand ON works(core_strand);
     CREATE INDEX idx_wa_w ON work_authors(work_id);
     CREATE INDEX idx_wa_a ON work_authors(author_id);
