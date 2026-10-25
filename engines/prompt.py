@@ -75,8 +75,7 @@ measured. A claim that omits its scope cannot be tested and will be \
 rejected.
 - GROUNDED: every hypothesis cites work_ids you actually retrieved. \
 Citations that do not exist in the corpus invalidate the hypothesis.
-- MEASURABLE NOW OR NEARLY: name the instrument class and spectral band \
-the experiment needs. "Someone should investigate" is not an experiment.
+- MEASURABLE NOW OR NEARLY: <<MEASURABLE>> "Someone should investigate" is not an experiment.
 
 Decompose your reasoning into steps. Each step is justified as:
   "citation"    - rests on specific retrieved works (list their work_ids)
@@ -112,13 +111,19 @@ Return ONLY a JSON object, no prose before or after, matching:
     ],
     "cited_work_ids": ["W...", "W..."],
     "proposed_experiment": "<the measurement that would settle it>",
-    "required_instrument": "<detector class and band>",
+    "required_instrument": "<<INSTRUMENT_HINT>>",
     "engine_native_score": <your own 0-1 confidence>,
     "novelty_self_claim": "<what is new about this, vs the register>"
   }}
  ]}}
 """
 
+
+# Field wording a pack may override (pack.yaml prompts.extras); the defaults
+# are the original text, so existing packs render byte-identical prompts.
+MEASURABLE = ("name the instrument class and spectral band the experiment "
+              "needs.")
+INSTRUMENT_HINT = "<detector class and band>"
 
 # How the engine reaches the corpus. "cli" is the text above, verbatim
 # (run 1's config hashes are over it); "mcp" swaps in the MCP tool names
@@ -157,8 +162,11 @@ def template(access: str = "cli") -> str:
                          f"covers {sorted(ACCESS_MODES)}")
     levels = "\n".join("  " + line for line in
                        PACK.causal_levels.splitlines())
+    x = PACK.prompt_extras
     tmpl = (TEMPLATE_BASE.replace("<<DOMAIN>>", PACK.domain)
-            .replace("<<CAUSAL_LEVELS>>", levels))
+            .replace("<<CAUSAL_LEVELS>>", levels)
+            .replace("<<MEASURABLE>>", x.get("measurable", MEASURABLE))
+            .replace("<<INSTRUMENT_HINT>>", x.get("instrument_hint", INSTRUMENT_HINT)))
     return tmpl.replace(CLI_ACCESS, ACCESS_MODES[access])
 
 

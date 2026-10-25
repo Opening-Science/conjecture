@@ -34,7 +34,7 @@ ENTRY_QUERIES = PACK.entry_queries
 
 def parse_questions(md: str) -> list[dict]:
     """Split the questions document into per-question briefs."""
-    blocks = re.split(r"\n## (Q\d)\. ", md)
+    blocks = re.split(r"\n## (Q\d+)\. ", md)
     out = []
     for i in range(1, len(blocks), 2):
         qid, body = blocks[i], blocks[i + 1]
@@ -110,7 +110,8 @@ def main() -> None:
             "Propose falsifiable hypotheses that ADVANCE this question. A "
             "hypothesis that merely restates a registry claim scores zero "
             "for novelty; a hypothesis that cannot be measured with a "
-            "named instrument scores zero for usefulness. Ground every "
+            f"named {PACK.prompt_extras.get('instrument_noun', 'instrument')} "
+            "scores zero for usefulness. Ground every "
             "claim in works retrieved through the corpus API, cite them by "
             "work_id, and state the measurement that would settle it.")
         path = SEEDS / f"{qid}.json"

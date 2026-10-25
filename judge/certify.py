@@ -183,6 +183,10 @@ Return ONLY a JSON array:
 
 Items to audit:
 """
+# a pack may name its own practitioner (pack.yaml prompts.extras.practitioner)
+JUDGE_PROMPT = JUDGE_PROMPT.replace(
+    "a competent laboratory",
+    PACK.prompt_extras.get("practitioner", "a competent laboratory"))
 
 
 def main() -> None:
