@@ -153,7 +153,9 @@ For each item you are given the claim, its scope, its proposed \
 experiment, its rationale steps, and the FULL TEXT OF THE ABSTRACTS of \
 every work it cites.
 
-Audit each rationale step:
+Audit each rationale step. Steps are numbered from 0 in the order of the \
+"rationale" list (the first step is step 0); use these numbers \
+everywhere, including in your reason.
 - a "citation" step survives only if the cited works, as shown to you, \
 actually assert what the step claims. A work that is merely on the same \
 topic does NOT support a specific claim. Misattribution is the failure \
@@ -182,7 +184,8 @@ misattributed; name the step and why
 
 Return ONLY a JSON array:
 [{"candidate_id": "C001", "verdict": "certified|pedantic|declined", \
-"failing_step": <index or null>, "grounded": true/false, \
+"failing_step": <0-based index of the failing step, or null>, \
+"grounded": true/false, \
 "testable": true/false, "novel": true/false, \
 "reason": "<one sentence, concrete>"}]
 
